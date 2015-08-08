@@ -1,0 +1,427 @@
+% \iffalse meta-comment
+%<*internal>
+\iffalse
+%</internal>
+%<*readme>
+# mynsfc
+My LaTeX template for writing the main body of NSFC proposals.
+
+----------------------------------------------------------------
+mynsfc --- A new LaTeX class
+Author:  Fei Qi
+E-mail:  fred.qi@ieee.org
+License: Released under the LaTeX Project Public License v1.3c or later
+See:     http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+Some text about the class: probably the same as the abstract.
+%</readme>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+mynsfc --- A new LaTeX class
+Author:  Fei Qi
+E-mail:  fred.qi@ieee.org
+License: Released under the LaTeX Project Public License v1.3c or later
+See:     http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2015 by Fei Qi <fred.qi@ieee.org>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Fei Qi.
+
+This work consists of the file mynsfc.dtx and a Makefile.
+Running "make" generates the derived files README, mynsfc.pdf and mynsfc.cls.
+Running "make inst" installs the files in the user's TeX tree.
+Running "make install" installs the files in the local TeX tree.
+
+\endpostamble
+
+\usedir{tex/xelatex/mynsfc}
+\generate{
+  \file{\jobname.cls}{\from{\jobname.dtx}{class}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/xelatex/mynsfc}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+% \usedir{doc/xelatex/mynsfc}
+% \generate{
+%   \file{README.md}{\from{\jobname.dtx}{readme}}
+% }
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{mynsfc.dtx}
+%</driver>
+%<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<class>\ProvidesClass{mynsfc}
+%<*class>
+    [2015/01/16 v1.00 A LaTeX class for writing NSFC proposals.]
+%</class>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
+\usepackage[numbered]{hypdoc}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \GetFileInfo{\jobname.dtx}
+% \DoNotIndex{\newcommand,\newenvironment}
+%
+%\title{\textsf{mynsfc} --- A new LaTeX class\thanks{This file
+%   describes version \fileversion, last revised \filedate.}
+%}
+%\author{Fei Qi\thanks{E-mail: fred.qi@ieee.org}}
+%\date{Released \filedate}
+%
+%\maketitle
+%
+%\changes{v1.00}{2015/01/16}{First public release}
+%
+% \begin{abstract}
+% ==== Put abstract text here. ====
+% \end{abstract}
+%
+% \section{Usage}
+%
+% ==== Put descriptive text here. ====
+%
+% \DescribeMacro{\dummyMacro}
+% This macro does nothing.\index{doing nothing|usage} It is merely an
+% example.  If this were a real macro, you would put a paragraph here
+% describing what the macro is supposed to do, what its mandatory and
+% optional arguments are, and so forth.
+%
+% \DescribeEnv{dummyEnv}
+% This environment does nothing.  It is merely an example.
+% If this were a real environment, you would put a paragraph here
+% describing what the environment is supposed to do, what its
+% mandatory and optional arguments are, and so forth.
+%
+%\StopEventually{^^A
+%  \PrintChanges
+%  \PrintIndex
+%}
+%
+% \section{Implementation}
+%
+%<*class>
+%    \begin{macrocode}
+%% Options
+\newif\ifmynsfc@subfig\mynsfc@subfigfalse
+\DeclareOption{subfig}{\mynsfc@subfigtrue}
+\ProcessOptions
+%% Load default class
+\LoadClass[a4paper,fleqn]{article}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%% Load required packages
+\RequirePackage{titlesec}
+\RequirePackage{marvosym}
+\RequirePackage{bm,amsmath,amssymb}
+\RequirePackage{paralist}
+\RequirePackage{graphicx}
+\ifmynsfc@subfig
+\RequirePackage[config]{subfig}
+\else
+\RequirePackage{subcaption}
+\fi
+\RequirePackage{xcolor}
+\RequirePackage{calc}
+\RequirePackage{hyperref}
+\hypersetup{%
+  breaklinks=true,
+  colorlinks=true,
+  allcolors=black,
+  pdfpagelabels}
+\urlstyle{same}
+%    \end{macrocode}
+%    \begin{macrocode}
+%% Load and setup package biblatex
+\RequirePackage[backend=biber,
+                url=true,
+                isbn=false,
+                defernumbers=true,
+                style=ieee]{biblatex}
+
+\appto{\bibfont}{\wuhao}
+\defbibheading{reftype}[\bibname]{\subsection*{#1}}
+\defbibheading{cvtype}[\bibname]{\paragraph{#1}}
+\defbibfilter{conference}{type=inproceedings or type=incollection}
+
+\RequirePackage{xpatch}% or use http://tex.stackexchange.com/a/40705
+
+\newbibmacro*{name:bold}[2]{%
+  \def\do##1{\ifstrequal{#1, #2}{##1}{\bfseries\listbreak}{}}%
+  \dolistloop{\boldnames}}
+\newcommand*{\boldnames}{}
+
+\xpretobibmacro{name:last}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:first-last}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:last-first}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:delim}{\begingroup\normalfont}{}{}
+
+\xapptobibmacro{name:last}{\endgroup}{}{}
+\xapptobibmacro{name:first-last}{\endgroup}{}{}
+\xapptobibmacro{name:last-first}{\endgroup}{}{}
+\xapptobibmacro{name:delim}{\endgroup}{}{}
+%    \end{macrocode}
+%
+% \begin{macro}{\dummyMacro}
+% This is a dummy macro.  If it did anything, we'd describe its
+% implementation here.
+%    \begin{macrocode}
+%    \begin{macrocode}
+%
+\newcommand{\dummyMacro}{}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+%% Setup Chinese fonts with xeCJK
+\RequirePackage[AutoFakeBold]{xeCJK}
+\def\CJK@null{\kern\CJKnullspace\Unicode{48}{7}\kern\CJKnullspace}
+\punctstyle{quanjiao}
+\defaultfontfeatures{Mapping=tex-text} % after fontspec
+\setCJKmainfont{仿宋_GB2312}
+\setCJKsansfont{SimHei}
+\setCJKfamilyfont{song}{仿宋_GB2312}
+\setCJKfamilyfont{hei}{SimHei}
+\setCJKfamilyfont{kai}{KaiTi}
+\setmainfont{Times New Roman}
+\setmonofont{Courier Std}
+%    \end{macrocode}
+%
+% \begin{macro}{\kai}
+% \begin{macro}{\kaiti}
+% \begin{macro}{\song}
+% \begin{macro}{\songti}
+% \begin{macro}{\hei}
+% \begin{macro}{\heiti}
+% Define commands to select Chinese fonts.
+%    \begin{macrocode}
+\newcommand{\kai}{\CJKfamily{kai}} % 仿宋体
+\newcommand{\song}{\CJKfamily{song}} % 宋体
+\newcommand{\hei}{\CJKfamily{hei}} % 黑体
+\def\kaiti{\kai}
+\def\songti{\song}
+\def\heiti{\hei}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%    \begin{macrocode}
+\newlength\mynsfc@linespace
+\newcommand{\mynsfc@choosefont}[2]{%
+  \setlength{\mynsfc@linespace}{#2*\real{#1}}%
+  \fontsize{#2}{\mynsfc@linespace}\selectfont}
+\def\mynsfc@define@fontsize#1#2{%
+  \expandafter\newcommand\csname #1\endcsname[1][\baselinestretch]{%
+    \mynsfc@choosefont{##1}{#2}}}
+\mynsfc@define@fontsize{chuhao}{42bp}
+\mynsfc@define@fontsize{xiaochu}{36bp}
+\mynsfc@define@fontsize{yihao}{26bp}
+\mynsfc@define@fontsize{xiaoyi}{24bp}
+\mynsfc@define@fontsize{erhao}{22bp}
+\mynsfc@define@fontsize{xiaoer}{18bp}
+\mynsfc@define@fontsize{sanhao}{16bp}
+\mynsfc@define@fontsize{xiaosan}{15bp}
+\mynsfc@define@fontsize{sihao}{14bp}
+\mynsfc@define@fontsize{banxiaosi}{13bp}
+\mynsfc@define@fontsize{xiaosi}{12bp}
+\mynsfc@define@fontsize{dawu}{11bp}
+\mynsfc@define@fontsize{wuhao}{10.5bp}
+\mynsfc@define@fontsize{xiaowu}{9bp}
+\mynsfc@define@fontsize{liuhao}{7.5bp}
+\mynsfc@define@fontsize{xiaoliu}{6.5bp}
+\mynsfc@define@fontsize{qihao}{5.5bp}
+\mynsfc@define@fontsize{bahao}{5bp}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+% Define page layout
+\setlength{\textwidth}{\paperwidth}
+\setlength{\textheight}{\paperheight}
+\setlength\marginparwidth{0mm}
+\setlength\marginparsep{0mm}
+\addtolength{\textwidth}{-50mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\headheight}{20pt}
+\setlength{\topskip}{0mm}
+\setlength{\skip\footins}{15pt}
+\setlength{\topmargin}{-15mm}
+\setlength{\footskip}{13mm}
+\setlength{\headsep}{6mm}
+\addtolength{\textheight}{-50mm}
+\setlength{\parskip}{0pt \@plus2pt \@minus0pt}
+%    \end{macrocode}
+%
+% \begin{macro}{\normalsize}
+% Redefine command 
+%    \begin{macrocode}
+\renewcommand\normalsize{%
+  \@setfontsize\normalsize{12bp}{20bp}
+  \abovedisplayskip=10bp \@plus 2bp \@minus 2bp
+  \abovedisplayshortskip=10bp \@plus 2bp \@minus 2bp
+  \belowdisplayskip=\abovedisplayskip
+  \belowdisplayshortskip=\abovedisplayshortskip}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+% Define page styles      
+\def\ps@mynsfc@empty{%
+  \let\@oddhead\@empty%
+  \let\@evenhead\@empty%
+  \let\@oddfoot\@empty%
+  \let\@evenfoot\@empty}
+%    \end{macrocode}
+%
+% \begin{environment}{hcomment}
+% Dimmed text used as hint after section titles. 
+%    \begin{macrocode}
+\newenvironment{hcomment}{\vskip-3pt\color{gray}}{\vskip6pt}
+%    \end{macrocode}
+%
+% \changes{v1.00a}{2015/01/16}{Added a spurious change log entry to
+%   show what a change \emph{within} an environment definition looks
+%   like.}
+% Don't use |%| to introduce a code comment within a |macrocode|
+% environment.  Instead, you should typeset all of your comments with
+% LaTeX---doing so gives much prettier results.  For comments within a
+% macro/environment body, just do an |\end{macrocode}|, include some
+% commentary, and do another |\begin{macrocode}|.  It's that simple.
+% \end{environment}
+%
+% \begin{macro}{\figurename}
+% \begin{macro}{\tablename}
+% \begin{macro}{\contentsname}
+% Translate English to Chinese.
+%    \begin{macrocode}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\renewcommand{\contentsname}{内容目录}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%    \begin{macrocode}
+%      
+\DeclareCaptionLabelFormat{mynsfc@cap}{{\wuhao#1\rmfamily#2}}
+\DeclareCaptionLabelSeparator{mynsfc@sep}{\hspace{1em}}
+\DeclareCaptionFont{mynsfc@capfont}{\wuhao}
+\captionsetup{labelformat=mynsfc@cap,
+              labelsep=mynsfc@sep,
+              font=mynsfc@capfont,
+              justification=centering}
+%    \end{macrocode}
+%
+% \begin{macro}{CJKindent}
+% Indent with two Chinese full spaces.
+%    \begin{macrocode}
+%      
+\newlength\mynsfc@CJK@twochars
+\newcommand{\mynsfc@unicode}[2]{\char\numexpr#1*256+#2\relax}
+\def\mynsfc@CJK@space{\mynsfc@unicode{48}{7}}
+\def\CJKindent{%
+  \settowidth\mynsfc@CJK@twochars{\mynsfc@CJK@space\mynsfc@CJK@space}%
+  \parindent\mynsfc@CJK@twochars}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\part}
+% \begin{macro}{\section}
+% \begin{macro}{\subsection}
+% \begin{macro}{\subsubsection}
+% \begin{macro}
+% Commands to format several levels of titles (part, section, subsection).
+%    \begin{macrocode}
+\def\nsfc@CJKnumber#1{\ifcase#1{零}\or%
+  {一}\or{二}\or{三}\or{四}\or{五}\or%
+  {六}\or{七}\or{八}\or{九}\or{十}\or%
+  {十一}\or{十二}\or{十三}\or{十四}\or{十五}\or%
+  {十六}\or{十七}\or{十八}\or{十九}\or{二十}\fi}
+
+\renewcommand{\thepart}{\nsfc@CJKnumber{\c@part}}
+\titleformat{\part}{\kai\bfseries\sanhao}%
+            {（\thepart）}{0ex}{}
+\titlespacing{\part}{0ex}{4ex}{2ex}
+
+\@addtoreset{section}{part}
+\renewcommand{\thesection}{\arabic{section}.}
+\titleformat{\section}{\kai\bfseries\xiaosan}%
+            {\thesection}{0.25em}{}
+\titlespacing{\section}{0em}{4ex}{2ex}
+
+\renewcommand{\thesubsection}{\bf\arabic{section}.\arabic{subsection}}
+\titleformat{\subsection}{\hei\sihao}%
+            {\thesubsection}{0.25em}{}
+\titlespacing{\subsection}{0em}{2ex}{1ex}
+
+\titleformat{\subsubsection}{\kaiti\bfseries\banxiaosi}%
+            {\thesubsubsection}{0.25em}{}
+\titlespacing{\subsubsection}{0em}{2ex}{1ex}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%    \begin{macrocode}
+\let\mynsfc@begindocumenthook\@begindocumenthook
+\let\mynsfc@enddocumenthook\@enddocumenthook
+\def\AtBeginDocument{\g@addto@macro\mynsfc@begindocumenthook}
+\def\AtEndDocument{\g@addto@macro\mynsfc@enddocumenthook}
+\def\@begindocumenthook{\mynsfc@begindocumenthook}
+\def\@enddocumenthook{\mynsfc@enddocumenthook}
+\AtBeginDocument{\ps@mynsfc@empty\CJKindent}
+\endinput
+%</class>
+%    \end{macrocode}
+%\Finale
