@@ -1,12 +1,17 @@
 # mynsfc
+
 My LaTeX template for writing the main body of NSFC proposals.
 
 ----------------------------------------------------------------
-mynsfc --- A new LaTeX class
-Author:  Fei Qi
-E-mail:  fred.qi@ieee.org
-License: Released under the LaTeX Project Public License v1.3c or later
-See:     http://www.latex-project.org/lppl.txt
+>  mynsfc --- A new LaTeX class <br/>
+>  Author:  Fei Qi <br/>
+>  E-mail:  fred.qi@ieee.org <br/>
+>  License: Released under the LaTeX Project Public License v1.3c or later <br/>
+>  See:     http://www.latex-project.org/lppl.txt <br/>
 ----------------------------------------------------------------
 
-Some text about the class: probably the same as the abstract.
+
+# 日志
+
+- 20150818 本年度自然科学基金今日放榜，本人基本项目有幸中选。特将申请基金所使用
+  的 XeLaTeX 模板共享，以方便其他愿意或希望使用 XeLaTeX 的申请人。
