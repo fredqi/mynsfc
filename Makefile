@@ -2,8 +2,8 @@ NAME  = mynsfc
 EGFN  = examples/my-nsfc-proposal
 SHELL = bash
 PWD   = $(shell pwd)
-TEMP := $(shell mktemp -d -t dtxgen.XXXXXXXXXX)
-TDST := $(shell mktemp -d -t dtxtds.XXXXXXXXXX)
+TEMP := $(shell mktemp -u -d -t dtxgen.XXXXXXXXXX)
+TDIR  = $(TEMP)/$(NAME)
 VERS  = $(shell ltxfileinfo -v $(NAME).dtx)
 LOCAL = $(shell kpsewhich --var-value TEXMFLOCAL)
 UTREE = $(shell kpsewhich --var-value TEXMFHOME)
@@ -38,15 +38,15 @@ install: all
 	sudo cp $(EGFN).tex $(LOCAL)/doc/xelatex/$(NAME)
 	sudo cp $(EGFN).pdf $(LOCAL)/doc/xelatex/$(NAME)
 zip: all
-	mkdir $(TEMP)/$(NAME)
-	cp $(NAME).{pdf,dtx} README.md $(TEMP)/$(NAME)
-	cd $(TEMP); zip -Drq $(PWD)/$(NAME)-$(VERS).zip $(NAME)
-tds-zip: all
-	mkdir -p $(TDST)/{tex,source,doc}/xelatex/$(NAME)
-	cp $(NAME).dtx $(TDST)/source/xelatex/$(NAME)
-	cp $(NAME).cls $(TDST)/tex/xelatex/$(NAME)
-	cp $(NAME).pdf $(TDST)/doc/xelatex/$(NAME)
-	cp $(EGFN).tex $(TDST)/doc/xelatex/$(NAME)
-	cp $(EGFN).bib $(TDST)/doc/xelatex/$(NAME)
-	cp $(EGFN).pdf $(TDST)/doc/xelatex/$(NAME)
-	cd $(TDST); zip -Drq $(PWD)/$(NAME).tds.zip tex source doc
+	mkdir -p $(TEMP)/{tex,source,doc}/xelatex/$(NAME)
+	cp $(NAME).dtx $(TEMP)/source/xelatex/$(NAME)
+	cp $(NAME).cls $(TEMP)/tex/xelatex/$(NAME)
+	cp $(NAME).pdf $(TEMP)/doc/xelatex/$(NAME)
+	cp $(EGFN).tex $(TEMP)/doc/xelatex/$(NAME)
+	cp $(EGFN).bib $(TEMP)/doc/xelatex/$(NAME)
+	cp $(EGFN).pdf $(TEMP)/doc/xelatex/$(NAME)
+	cd $(TEMP); zip -Drq $(TEMP)/$(NAME).tds.zip tex source doc
+	mkdir -p $(TDIR)
+	cp $(NAME).{pdf,dtx} README.md $(TDIR)
+	cd $(TEMP); zip -Drq $(PWD)/$(NAME)-$(VERS).zip $(NAME) $(NAME).tds.zip
+	$(RM) -r $(TEMP)
