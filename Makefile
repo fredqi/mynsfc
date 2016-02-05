@@ -7,7 +7,7 @@ VERS  = $(shell ltxfileinfo -v $(NAME).dtx)
 LOCAL = $(shell kpsewhich --var-value TEXMFLOCAL)
 UTREE = $(shell kpsewhich --var-value TEXMFHOME)
 all:	$(NAME).pdf clean
-#	test -e README.txt && mv README.txt README || exit 0
+	$(MAKE) -C examples all
 $(NAME).pdf: $(NAME).dtx
 	xelatex -shell-escape -recorder -interaction=batchmode $(NAME).dtx >/dev/null
 	if [ -f $(NAME).glo ]; then makeindex -q -s gglo.ist -o $(NAME).gls $(NAME).glo; fi
@@ -15,9 +15,11 @@ $(NAME).pdf: $(NAME).dtx
 	xelatex --recorder --interaction=nonstopmode $(NAME).dtx > /dev/null
 	xelatex --recorder --interaction=nonstopmode $(NAME).dtx > /dev/null
 clean:
-	rm -f $(NAME).{aux,fls,glo,gls,hd,idx,ilg,ind,ins,log,out}
+	$(RM) $(NAME).{aux,fls,glo,gls,hd,idx,ilg,ind,ins,log,out}
+	$(MAKE) -C examples clean
 distclean: clean
-	rm -f $(NAME).{pdf,cls}
+	$(RM) $(NAME).{pdf,cls}
+	$(MAKE) -C examples distclean
 inst: all
 	mkdir -p $(UTREE)/{tex,source,doc}/xelatex/$(NAME)
 	cp $(NAME).dtx $(UTREE)/source/xelatex/$(NAME)
