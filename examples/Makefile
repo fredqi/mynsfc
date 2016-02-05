@@ -9,6 +9,7 @@ $(NAME).pdf: $(NAME).tex $(NAME).bib
 	$(LATEX) --recorder --interaction=nonstopmode $(NAME).tex > /dev/null
 	$(LATEX) --recorder --interaction=nonstopmode $(NAME).tex > /dev/null
 .PHONY:	clean distclean $(CLEANEXT)
+.SILENT:	$(CLEANEXT)
 $(CLEANEXT):
 	$(RM) $(NAME).$@
 clean: $(CLEANEXT)
