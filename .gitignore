@@ -30,6 +30,13 @@
 *.synctex.gz(busy)
 *.pdfsync
 
+## Package files:
+mynsfc.cls
+mynsfc.pdf
+mynsfc*.zip
+examples/mynsfc.cls
+examples/my-nsfc-proposal.pdf
+
 ## Auxiliary and intermediate files from other packages:
 
 # algorithms
