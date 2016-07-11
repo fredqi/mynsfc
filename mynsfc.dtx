@@ -39,7 +39,7 @@ See:     http://www.latex-project.org/lppl.txt
 \endpreamble
 \postamble
 
-Copyright (C) 2015 by Fei Qi <fred.qi@ieee.org>
+Copyright (C) 2015,2016 by Fei Qi <fred.qi@ieee.org>
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License (LPPL), either
@@ -89,7 +89,7 @@ Running "make install" installs the files in the local TeX tree.
 %<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<class>\ProvidesClass{mynsfc}
 %<*class>
-    [2015/08/18 v1.00 A LaTeX class for writing NSFC proposals.]
+    [2016/07/11 v1.01 A LaTeX class for writing NSFC proposals.]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -124,6 +124,9 @@ Running "make install" installs the files in the local TeX tree.
 %\maketitle
 %
 %\changes{v1.00}{2015/08/18}{First public release}
+%\changes{v1.01}{2016/07/11}{Revised command maketitle}
+%\changes{v1.01}{2016/07/11}{Added an option arabicpart}
+%\changes{v1.01}{2016/07/11}{Author highlight with latest biblatex}
 %
 % \begin{abstract}
 % 用于自然基金申请书正文部分的撰写。
@@ -131,6 +134,7 @@ Running "make install" installs the files in the local TeX tree.
 %
 % \section{使用说明}
 %
+% 参见样例文件 \texttt{examples/my-nsfc-proposal.tex}。
 %
 %\StopEventually{^^A
 %  \PrintChanges
@@ -143,7 +147,10 @@ Running "make install" installs the files in the local TeX tree.
 %    \begin{macrocode}
 %% Options
 \newif\ifmynsfc@subfig\mynsfc@subfigfalse
+\newif\ifmynsfc@arabicpart\mynsfc@arabicpartfalse
 \DeclareOption{subfig}{\mynsfc@subfigtrue}
+\DeclareOption{arabicpart}{\mynsfc@arabicparttrue}
+\ExecuteOptions{}
 \ProcessOptions
 %% Load default class
 \LoadClass[a4paper,fleqn]{article}
@@ -186,6 +193,34 @@ Running "make install" installs the files in the local TeX tree.
 
 \RequirePackage{xpatch}% or use http://tex.stackexchange.com/a/40705
 
+\@ifpackagelater{biblatex}{2016/03/01}
+{
+\newcommand*{\list@bold@authors}{}
+\newcommand{\initauthors}[1]{
+  \renewcommand*{\list@bold@authors}{}
+  \forcsvlist{\listadd\list@bold@authors}{#1}}
+
+\newboolean{bold}
+\renewcommand*{\mkbibnamefamily}[1]{\ifthenelse{\boolean{bold}}{\textbf{#1}}{#1}}
+\renewcommand*{\mkbibnamegiven}[1]{\ifthenelse{\boolean{bold}}{\textbf{#1}}{#1}}
+
+\newbibmacro*{name:bold}{%
+  \setboolean{bold}{false}%
+  \def\do##1{\iffieldequalstr{hash}{##1}{\setboolean{bold}{true}\listbreak}{}}%
+  \dolistloop{\list@bold@authors}%
+}
+
+\xpretobibmacro{name:family}{\begingroup\usebibmacro{name:bold}}{}{}{}{}
+\xpretobibmacro{name:given-family}{\begingroup\usebibmacro{name:bold}}{}{}{}{}
+\xpretobibmacro{name:family-given}{\begingroup\usebibmacro{name:bold}}{}
+%\xpretobibmacro{name:delim}{\begingroup\normalfont}{}{}
+
+\xapptobibmacro{name:family}{\endgroup}{}{}{}{}
+\xapptobibmacro{name:given-family}{\endgroup}{}{}{}{}
+\xapptobibmacro{name:family-given}{\endgroup}{}{}{}{}
+%\xapptobibmacro{name:delim}{\endgroup}{}{}
+}
+{
 \newbibmacro*{name:bold}[2]{%
   \def\do##1{\ifstrequal{#1, #2}{##1}{\bfseries\listbreak}{}}%
   \dolistloop{\boldnames}}
@@ -200,6 +235,7 @@ Running "make install" installs the files in the local TeX tree.
 \xapptobibmacro{name:first-last}{\endgroup}{}{}
 \xapptobibmacro{name:last-first}{\endgroup}{}{}
 \xapptobibmacro{name:delim}{\endgroup}{}{}
+}
 %    \end{macrocode}
 %
 % \begin{macro}{\dummyMacro}
@@ -220,6 +256,7 @@ Running "make install" installs the files in the local TeX tree.
 \defaultfontfeatures{Mapping=tex-text} % after fontspec
 \setCJKmainfont{仿宋_GB2312}
 \setCJKsansfont{SimHei}
+\setCJKmonofont{仿宋_GB2312}
 \setCJKfamilyfont{song}{仿宋_GB2312}
 \setCJKfamilyfont{hei}{SimHei}
 \setCJKfamilyfont{kai}{KaiTi}
@@ -360,6 +397,13 @@ Running "make install" installs the files in the local TeX tree.
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\maketitle}
+\renewcommand{\maketitle}{%
+  \begin{center}%
+    \heiti\erhao\@title%
+  \end{center}}
+% \end{macro}
+%
 % \begin{macro}{\part}
 % \begin{macro}{\section}
 % \begin{macro}{\subsection}
@@ -367,30 +411,33 @@ Running "make install" installs the files in the local TeX tree.
 % \begin{macro}
 % Commands to format several levels of titles (part, section, subsection).
 %    \begin{macrocode}
+\ifmynsfc@arabicpart%
+\renewcommand{\thepart}{\arabic{part}.}
+\titleformat{\part}{\heiti\sanhao}{\thepart}{1ex}{}
+\renewcommand{\thesection}{\arabic{section})}
+\renewcommand{\thesubsection}{\Alph{subsection})}
+\else%
 \def\nsfc@CJKnumber#1{\ifcase#1{零}\or%
   {一}\or{二}\or{三}\or{四}\or{五}\or%
   {六}\or{七}\or{八}\or{九}\or{十}\or%
   {十一}\or{十二}\or{十三}\or{十四}\or{十五}\or%
   {十六}\or{十七}\or{十八}\or{十九}\or{二十}\fi}
+\renewcommand{\thepart}{（\nsfc@CJKnumber{\c@part}）}
+\titleformat{\part}{\heiti\sanhao}{\thepart}{0ex}{}
+\renewcommand{\thesection}{\arabic{section}.}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+\fi
 
-\renewcommand{\thepart}{\nsfc@CJKnumber{\c@part}}
-\titleformat{\part}{\kai\bfseries\sanhao}%
-            {（\thepart）}{0ex}{}
 \titlespacing{\part}{0ex}{4ex}{2ex}
 
 \@addtoreset{section}{part}
-\renewcommand{\thesection}{\arabic{section}.}
-\titleformat{\section}{\kai\bfseries\xiaosan}%
-            {\thesection}{0.25em}{}
+\titleformat{\section}{\heiti\xiaosan}{\thesection}{0.25em}{}
 \titlespacing{\section}{0em}{4ex}{2ex}
 
-\renewcommand{\thesubsection}{\bf\arabic{section}.\arabic{subsection}}
-\titleformat{\subsection}{\hei\sihao}%
-            {\thesubsection}{0.25em}{}
+\titleformat{\subsection}{\hei\sihao}{\thesubsection}{0.25em}{}
 \titlespacing{\subsection}{0em}{2ex}{1ex}
 
-\titleformat{\subsubsection}{\kaiti\bfseries\banxiaosi}%
-            {\thesubsubsection}{0.25em}{}
+\titleformat{\subsubsection}{\heiti\banxiaosi}{\thesubsubsection}{0.25em}{}
 \titlespacing{\subsubsection}{0em}{2ex}{1ex}
 %    \end{macrocode}
 % \end{macro}

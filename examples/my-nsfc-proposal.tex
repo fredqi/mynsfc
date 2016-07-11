@@ -4,8 +4,8 @@
 %% Author: Fred Qi
 %% Created: 2016-02-04 15:26:58(-0700)
 %%
-%% Last-Updated: 2016-02-04 22:00:53(-0700) [by Fred Qi]
-%%     Update #: 61
+%% Last-Updated: 2016-07-11 18:33:23(+0800) [by Fred Qi]
+%%     Update #: 71
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%% Commentary:
@@ -23,7 +23,8 @@
 \bibliography{IEEEabrv,my-nsfc-proposal}
 
 % 名称与申请人（不会在正文部分出现）
-\title{自然科学基金正文\XeLaTeX{}模板}
+% \title{自然科学基金正文\XeLaTeX{}模板}
+\title{报告正文}
 \author{齐飞}
 
 \begin{document}
@@ -32,9 +33,10 @@
 \thispagestyle{empty}
 
 %% 大字体显示“报告正文”字样
-\begin{center}
-  \kaiti \erhao \bfseries 报告正文
-\end{center}
+\maketitle
+% \begin{center}
+%   \kaiti \erhao \bfseries 报告正文
+% \end{center}
 
 \part{立项依据与研究内容}
 \label{part:proposal}
@@ -116,9 +118,12 @@
 
 \begin{refsection}
 
-  申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。
+  申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。下面命令
+  \texttt{initauthors} 中的哈希字符串可以在Biber/bibtex 生成的文件
+  \texttt{*.bbl} 中找到。
 
-  \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
+  % \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
+  \initauthors{{72b3cccfc646adeb1d6b20320b56fd7d}}
   \printbibliography[prefixnumbers=J,heading=cvtype,title={相关工作}]
 
 \end{refsection}
