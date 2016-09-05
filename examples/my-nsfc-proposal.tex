@@ -4,8 +4,8 @@
 %% Author: Fred Qi
 %% Created: 2016-02-04 15:26:58(-0700)
 %%
-%% Last-Updated: 2016-07-11 18:33:23(+0800) [by Fred Qi]
-%%     Update #: 71
+%% Last-Updated: 2016-09-05 16:49:58(+0800) [by Fred Qi]
+%%     Update #: 73
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%% Commentary:
@@ -18,7 +18,7 @@
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[subfig]{mynsfc}
+\documentclass[subfig,boldtoc]{mynsfc}
 
 \bibliography{IEEEabrv,my-nsfc-proposal}
 
@@ -121,6 +121,20 @@
   申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。下面命令
   \texttt{initauthors} 中的哈希字符串可以在Biber/bibtex 生成的文件
   \texttt{*.bbl} 中找到。
+
+  需要强调的作者列表有两种形式，分别适用于不同版本的\texttt{biblatex}。
+  \begin{description}
+  \item[3.3+ (20160301)] 由于姓名处理的宏更新，请使用哈希字符串列表指定需要强调
+    的作者。
+\begin{verbatim}
+    \initauthors{{72b3cccfc646adeb1d6b20320b56fd7d}}
+\end{verbatim}
+  \item[3.2- (20151228)] 使用旧式的姓名处理宏，使用下列形式的作者列表。
+\begin{verbatim}
+    \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
+\end{verbatim}
+  \end{description}
+
 
   % \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
   \initauthors{{72b3cccfc646adeb1d6b20320b56fd7d}}

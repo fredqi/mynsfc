@@ -89,7 +89,7 @@ Running "make install" installs the files in the local TeX tree.
 %<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<class>\ProvidesClass{mynsfc}
 %<*class>
-    [2016/07/11 v1.01 A LaTeX class for writing NSFC proposals.]
+    [2016/09/05 v1.01 A XeLaTeX class for writing NSFC proposals.]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
@@ -121,12 +121,18 @@ Running "make install" installs the files in the local TeX tree.
 % \filedate.} } \author{Fred Qi\thanks{E-mail: fred.qi@ieee.org}} \date{
 % \filedate 发布}
 %
-%\maketitle
+% \maketitle
 %
-%\changes{v1.00}{2015/08/18}{First public release}
-%\changes{v1.01}{2016/07/11}{Revised command maketitle}
-%\changes{v1.01}{2016/07/11}{Added an option arabicpart}
-%\changes{v1.01}{2016/07/11}{Author highlight with latest biblatex}
+% \changes{v1.00}{2015/08/18}{First public release}
+% \changes{v1.01}{2016/07/11}{Improved command \texttt{maketitle}}
+% \changes{v1.01}{2016/07/11}{Added an option \texttt{arabicpart}}
+% \changes{v1.01}{2016/07/11}{Author highlight with \texttt{biblatex} newer than
+% 3.3 (2016-03-01)}
+% \changes{v1.01}{2016/09/05}{Added options \texttt{tocfont} and
+% \texttt{boldtoc} to select font on headings}
+% \changes{v1.01}{2016/09/05}{Using kvoptions to handle package options}
+% \changes{v1.01}{2016/09/05}{Added an option \texttt{toccolor} to show outline
+% in a given color specified by a HTML/CSS style hex code}
 %
 % \begin{abstract}
 % 用于自然基金申请书正文部分的撰写。
@@ -145,13 +151,16 @@ Running "make install" installs the files in the local TeX tree.
 %
 %<*class>
 %    \begin{macrocode}
-%% Options
-\newif\ifmynsfc@subfig\mynsfc@subfigfalse
-\newif\ifmynsfc@arabicpart\mynsfc@arabicpartfalse
-\DeclareOption{subfig}{\mynsfc@subfigtrue}
-\DeclareOption{arabicpart}{\mynsfc@arabicparttrue}
 \ExecuteOptions{}
-\ProcessOptions
+\ProcessOptions*
+%% Options
+\RequirePackage{kvoptions}
+\DeclareBoolOption[false]{subfig}
+\DeclareBoolOption[false]{arabicpart}
+\DeclareBoolOption[false]{boldtoc}
+\DeclareStringOption[kai]{tocfont}
+\DeclareStringOption[0070c0]{toccolor}
+\ProcessKeyvalOptions*
 %% Load default class
 \LoadClass[a4paper,fleqn]{article}
 %    \end{macrocode}
@@ -238,16 +247,6 @@ Running "make install" installs the files in the local TeX tree.
 }
 %    \end{macrocode}
 %
-% \begin{macro}{\dummyMacro}
-% This is a dummy macro.  If it did anything, we'd describe its
-% implementation here.
-%    \begin{macrocode}
-%    \begin{macrocode}
-%
-\newcommand{\dummyMacro}{}
-%    \end{macrocode}
-% \end{macro}
-%
 %    \begin{macrocode}
 %% Setup Chinese fonts with xeCJK
 \RequirePackage[AutoFakeBold]{xeCJK}
@@ -286,6 +285,15 @@ Running "make install" installs the files in the local TeX tree.
 % \end{macro}
 % \end{macro}
 %
+% \begin{macro}{\tocformat}
+%    \begin{macrocode}
+\ifmynsfc@boldtoc
+  \newcommand{\tocformat}{\CJKfamily{\mynsfc@tocfont}\color[HTML]{\mynsfc@toccolor}\bfseries}
+\else
+  \newcommand{\tocformat}{\CJKfamily{\mynsfc@tocfont}\color[HTML]{\mynsfc@toccolor}}
+\fi
+%    \end{macrocode}
+% \end{macro}
 %    \begin{macrocode}
 \newlength\mynsfc@linespace
 \newcommand{\mynsfc@choosefont}[2]{%
@@ -356,7 +364,7 @@ Running "make install" installs the files in the local TeX tree.
 % \begin{environment}{hcomment}
 % Dimmed text used as hint after section titles. 
 %    \begin{macrocode}
-\newenvironment{hcomment}{\vskip-3pt\color{gray}}{\vskip6pt}
+\newenvironment{hcomment}{\vskip-3pt\color[HTML]{\mynsfc@toccolor}}{\vskip6pt}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -400,7 +408,7 @@ Running "make install" installs the files in the local TeX tree.
 % \begin{macro}{\maketitle}
 \renewcommand{\maketitle}{%
   \begin{center}%
-    \heiti\erhao\@title%
+    \tocformat\erhao\@title%
   \end{center}}
 % \end{macro}
 %
@@ -413,7 +421,7 @@ Running "make install" installs the files in the local TeX tree.
 %    \begin{macrocode}
 \ifmynsfc@arabicpart%
 \renewcommand{\thepart}{\arabic{part}.}
-\titleformat{\part}{\heiti\sanhao}{\thepart}{1ex}{}
+\titleformat{\part}{\tocformat\sanhao}{\thepart}{1ex}{}
 \renewcommand{\thesection}{\arabic{section})}
 \renewcommand{\thesubsection}{\Alph{subsection})}
 \else%
@@ -423,7 +431,7 @@ Running "make install" installs the files in the local TeX tree.
   {十一}\or{十二}\or{十三}\or{十四}\or{十五}\or%
   {十六}\or{十七}\or{十八}\or{十九}\or{二十}\fi}
 \renewcommand{\thepart}{（\nsfc@CJKnumber{\c@part}）}
-\titleformat{\part}{\heiti\sanhao}{\thepart}{0ex}{}
+\titleformat{\part}{\tocformat\sanhao}{\thepart}{0ex}{}
 \renewcommand{\thesection}{\arabic{section}.}
 \renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
 \fi
@@ -431,13 +439,13 @@ Running "make install" installs the files in the local TeX tree.
 \titlespacing{\part}{0ex}{4ex}{2ex}
 
 \@addtoreset{section}{part}
-\titleformat{\section}{\heiti\xiaosan}{\thesection}{0.25em}{}
+\titleformat{\section}{\tocformat\xiaosan}{\thesection}{0.25em}{}
 \titlespacing{\section}{0em}{4ex}{2ex}
 
-\titleformat{\subsection}{\hei\sihao}{\thesubsection}{0.25em}{}
+\titleformat{\subsection}{\tocformat\sihao}{\thesubsection}{0.25em}{}
 \titlespacing{\subsection}{0em}{2ex}{1ex}
 
-\titleformat{\subsubsection}{\heiti\banxiaosi}{\thesubsubsection}{0.25em}{}
+\titleformat{\subsubsection}{\tocformat\banxiaosi}{\thesubsubsection}{0.25em}{}
 \titlespacing{\subsubsection}{0em}{2ex}{1ex}
 %    \end{macrocode}
 % \end{macro}
