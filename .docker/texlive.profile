@@ -1,0 +1,13 @@
+selected_scheme scheme-custom
+TEXDIR /usr/local/texlive
+TEXMFCONFIG ~/.texlive/texmf-config
+TEXMFHOME ~/.texlive/texmf
+TEXMFLOCAL /usr/local/texlive/texmf-local
+TEXMFSYSCONFIG /usr/local/texlive/texmf-config
+TEXMFSYSVAR /usr/local/texlive/texmf-var
+TEXMFVAR ~/.texlive/texmf-var
+collection-basic 1
+portable 0
+option_doc 0
+option_src 0
+option_autobackup 0

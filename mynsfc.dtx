@@ -98,11 +98,6 @@ Running "make install" installs the files in the local TeX tree.
 \usepackage{xltxtra}
 \usepackage{xeCJK}
 \defaultfontfeatures{Mapping=tex-text} % after fontspec
-\setCJKmainfont{仿宋_GB2312}
-\setCJKsansfont{SimHei}
-\setCJKmonofont{仿宋_GB2312}
-\setmainfont{Times New Roman}
-\setmonofont{Courier Std}
 \renewcommand{\abstractname}{摘\hspace{2em}要}
 \EnableCrossrefs
 \CodelineIndex
@@ -253,14 +248,9 @@ Running "make install" installs the files in the local TeX tree.
 \def\CJK@null{\kern\CJKnullspace\Unicode{48}{7}\kern\CJKnullspace}
 \punctstyle{quanjiao}
 \defaultfontfeatures{Mapping=tex-text} % after fontspec
-\setCJKmainfont{仿宋_GB2312}
-\setCJKsansfont{SimHei}
-\setCJKmonofont{仿宋_GB2312}
-\setCJKfamilyfont{song}{仿宋_GB2312}
-\setCJKfamilyfont{hei}{SimHei}
-\setCJKfamilyfont{kai}{KaiTi}
-\setmainfont{Times New Roman}
-\setmonofont{Courier Std}
+\setCJKfamilyfont{song}{FandolFang-Regular.otf}
+\setCJKfamilyfont{hei}{FandolHei-Regular.otf}
+\setCJKfamilyfont{kai}{FandolKai-Regular.otf}
 %    \end{macrocode}
 %
 % \begin{macro}{\kai}
@@ -271,7 +261,7 @@ Running "make install" installs the files in the local TeX tree.
 % \begin{macro}{\heiti}
 % Define commands to select Chinese fonts.
 %    \begin{macrocode}
-\newcommand{\kai}{\CJKfamily{kai}} % 仿宋体
+\newcommand{\kai}{\CJKfamily{kai}} % 楷体
 \newcommand{\song}{\CJKfamily{song}} % 宋体
 \newcommand{\hei}{\CJKfamily{hei}} % 黑体
 \def\kaiti{\kai}

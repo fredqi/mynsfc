@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/fredqi/mynsfc.svg?branch=master)](https://travis-ci.com/fredqi/mynsfc)
+----
 # mynsfc
 
 My LaTeX template for writing the main body of NSFC proposals.
