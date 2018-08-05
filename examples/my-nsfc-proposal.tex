@@ -4,8 +4,8 @@
 %% Author: Fred Qi
 %% Created: 2016-02-04 15:26:58(-0700)
 %%
-%% Last-Updated: 2018-07-01 16:00:28(+0800) [by Fred Qi]
-%%     Update #: 74
+%% Last-Updated: 2018-08-05 16:16:28(+0800) [by Fred Qi]
+%%     Update #: 82
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%% Commentary:
@@ -34,9 +34,8 @@
 
 %% 大字体显示“报告正文”字样
 \maketitle
-% \begin{center}
-%   \kaiti \erhao \bfseries 报告正文
-% \end{center}
+
+% \tableofcontents
 
 \part{立项依据与研究内容}
 \label{part:proposal}
@@ -73,6 +72,25 @@
 
 略。
 
+\begin{figure}[h]
+  \centering
+  
+  \caption{测试图表标题。}
+  \label{fig:test}
+\end{figure}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{cc}
+    \hline
+    标题 & 内容 \\
+    \hline
+    科目1 & 内容1 \\
+    \hline
+  \end{tabular}
+  \caption{测试图表标题。}
+  \label{tab:test}
+\end{table}
 \subsection{研究目标}
 
 略。

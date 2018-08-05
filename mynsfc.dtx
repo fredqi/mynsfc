@@ -1,23 +1,5 @@
 % \iffalse meta-comment
 %<*internal>
-\iffalse
-%</internal>
-%<*readme>
-# mynsfc
-My XeLaTeX template for writing the main body of NSFC proposals.
-
-----------------------------------------------------------------
-mynsfc --- A XeLaTeX template for writing the main body of NSFC proposals.
-Author:  Fei Qi
-E-mail:  fred.qi@ieee.org
-License: Released under the LaTeX Project Public License v1.3c or later
-See:     http://www.latex-project.org/lppl.txt
-----------------------------------------------------------------
-
-Some text about the class: probably the same as the abstract.
-%</readme>
-%<*internal>
-\fi
 \def\nameofplainTeX{plain}
 \ifx\fmtname\nameofplainTeX\else
   \expandafter\begingroup
@@ -29,17 +11,16 @@ Some text about the class: probably the same as the abstract.
 \askforoverwritefalse
 \preamble
 ----------------------------------------------------------------
-mynsfc --- A XeLaTeX template for writing the main body of NSFC proposals.
+mynsfc --- A LaTeX template for writing the main body of NSFC proposals.
 Author:  Fei Qi
 E-mail:  fred.qi@ieee.org
 License: Released under the LaTeX Project Public License v1.3c or later
 See:     http://www.latex-project.org/lppl.txt
 ----------------------------------------------------------------
-
 \endpreamble
 \postamble
 
-Copyright (C) 2015,2016 by Fei Qi <fred.qi@ieee.org>
+Copyright (C) 2015-2018 by Fei Qi <fred.qi@ieee.org>
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License (LPPL), either
@@ -58,22 +39,18 @@ Running "make install" installs the files in the local TeX tree.
 
 \endpostamble
 
-\usedir{tex/xelatex/mynsfc}
+\usedir{tex/latex/mynsfc}
 \generate{
   \file{\jobname.cls}{\from{\jobname.dtx}{class}}
 }
 %</install>
 %<install>\endbatchfile
 %<*internal>
-\usedir{source/xelatex/mynsfc}
+\usedir{source/latex/mynsfc}
 \generate{
   \file{\jobname.ins}{\from{\jobname.dtx}{install}}
 }
 \nopreamble\nopostamble
-% \usedir{doc/xelatex/mynsfc}
-% \generate{
-%   \file{README.md}{\from{\jobname.dtx}{readme}}
-% }
 \ifx\fmtname\nameofplainTeX
   \expandafter\endbatchfile
 \else
@@ -89,16 +66,13 @@ Running "make install" installs the files in the local TeX tree.
 %<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<class>\ProvidesClass{mynsfc}
 %<*class>
-    [2016/09/05 v1.01 A XeLaTeX class for writing NSFC proposals.]
+    [2018/08/05 v1.20 A LuaLaTeX class for writing NSFC proposals.]
 %</class>
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
 \usepackage[numbered]{hypdoc}
-\usepackage{xltxtra}
-\usepackage{xeCJK}
-\defaultfontfeatures{Mapping=tex-text} % after fontspec
-\renewcommand{\abstractname}{摘\hspace{2em}要}
+\usepackage[UTF8,fontset=fandol]{ctex}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
@@ -128,6 +102,7 @@ Running "make install" installs the files in the local TeX tree.
 % \changes{v1.01}{2016/09/05}{Using kvoptions to handle package options}
 % \changes{v1.01}{2016/09/05}{Added an option \texttt{toccolor} to show outline
 % in a given color specified by a HTML/CSS style hex code}
+% \changes{v1.20}{2018/08/05}{Changed to support Chinese based on the CTeX package.}
 %
 % \begin{abstract}
 % 用于自然基金申请书正文部分的撰写。
@@ -157,7 +132,7 @@ Running "make install" installs the files in the local TeX tree.
 \DeclareStringOption[0070c0]{toccolor}
 \ProcessKeyvalOptions*
 %% Load default class
-\LoadClass[a4paper,fleqn]{article}
+\LoadClass[a4paper,UTF8,zihao=-4,fontset=fandol]{ctexart}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -189,8 +164,7 @@ Running "make install" installs the files in the local TeX tree.
                 isbn=false,
                 defernumbers=true,
                 style=ieee]{biblatex}
-
-\appto{\bibfont}{\wuhao}
+\appto{\bibfont}{\small}
 \defbibheading{reftype}[\bibname]{\subsection*{#1}}
 \defbibheading{cvtype}[\bibname]{\paragraph{#1}}
 \defbibfilter{conference}{type=inproceedings or type=incollection}
@@ -242,39 +216,6 @@ Running "make install" installs the files in the local TeX tree.
 }
 %    \end{macrocode}
 %
-%    \begin{macrocode}
-%% Setup Chinese fonts with xeCJK
-\RequirePackage[AutoFakeBold]{xeCJK}
-\def\CJK@null{\kern\CJKnullspace\Unicode{48}{7}\kern\CJKnullspace}
-\punctstyle{quanjiao}
-\defaultfontfeatures{Mapping=tex-text} % after fontspec
-\setCJKfamilyfont{song}{FandolFang-Regular.otf}
-\setCJKfamilyfont{hei}{FandolHei-Regular.otf}
-\setCJKfamilyfont{kai}{FandolKai-Regular.otf}
-%    \end{macrocode}
-%
-% \begin{macro}{\kai}
-% \begin{macro}{\kaiti}
-% \begin{macro}{\song}
-% \begin{macro}{\songti}
-% \begin{macro}{\hei}
-% \begin{macro}{\heiti}
-% Define commands to select Chinese fonts.
-%    \begin{macrocode}
-\newcommand{\kai}{\CJKfamily{kai}} % 楷体
-\newcommand{\song}{\CJKfamily{song}} % 宋体
-\newcommand{\hei}{\CJKfamily{hei}} % 黑体
-\def\kaiti{\kai}
-\def\songti{\song}
-\def\heiti{\hei}
-%    \end{macrocode}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-%
 % \begin{macro}{\tocformat}
 %    \begin{macrocode}
 \ifmynsfc@boldtoc
@@ -284,34 +225,6 @@ Running "make install" installs the files in the local TeX tree.
 \fi
 %    \end{macrocode}
 % \end{macro}
-%    \begin{macrocode}
-\newlength\mynsfc@linespace
-\newcommand{\mynsfc@choosefont}[2]{%
-  \setlength{\mynsfc@linespace}{#2*\real{#1}}%
-  \fontsize{#2}{\mynsfc@linespace}\selectfont}
-\def\mynsfc@define@fontsize#1#2{%
-  \expandafter\newcommand\csname #1\endcsname[1][\baselinestretch]{%
-    \mynsfc@choosefont{##1}{#2}}}
-\mynsfc@define@fontsize{chuhao}{42bp}
-\mynsfc@define@fontsize{xiaochu}{36bp}
-\mynsfc@define@fontsize{yihao}{26bp}
-\mynsfc@define@fontsize{xiaoyi}{24bp}
-\mynsfc@define@fontsize{erhao}{22bp}
-\mynsfc@define@fontsize{xiaoer}{18bp}
-\mynsfc@define@fontsize{sanhao}{16bp}
-\mynsfc@define@fontsize{xiaosan}{15bp}
-\mynsfc@define@fontsize{sihao}{14bp}
-\mynsfc@define@fontsize{banxiaosi}{13bp}
-\mynsfc@define@fontsize{xiaosi}{12bp}
-\mynsfc@define@fontsize{dawu}{11bp}
-\mynsfc@define@fontsize{wuhao}{10.5bp}
-\mynsfc@define@fontsize{xiaowu}{9bp}
-\mynsfc@define@fontsize{liuhao}{7.5bp}
-\mynsfc@define@fontsize{xiaoliu}{6.5bp}
-\mynsfc@define@fontsize{qihao}{5.5bp}
-\mynsfc@define@fontsize{bahao}{5bp}
-%    \end{macrocode}
-%
 %    \begin{macrocode}
 % Define page layout
 \setlength{\textwidth}{\paperwidth}
@@ -330,18 +243,6 @@ Running "make install" installs the files in the local TeX tree.
 \addtolength{\textheight}{-50mm}
 \setlength{\parskip}{0pt \@plus2pt \@minus0pt}
 %    \end{macrocode}
-%
-% \begin{macro}{\normalsize}
-% Redefine command 
-%    \begin{macrocode}
-\renewcommand\normalsize{%
-  \@setfontsize\normalsize{12bp}{20bp}
-  \abovedisplayskip=10bp \@plus 2bp \@minus 2bp
-  \abovedisplayshortskip=10bp \@plus 2bp \@minus 2bp
-  \belowdisplayskip=\abovedisplayskip
-  \belowdisplayshortskip=\abovedisplayshortskip}
-%    \end{macrocode}
-% \end{macro}
 %    \begin{macrocode}
 % Define page styles      
 \def\ps@mynsfc@empty{%
@@ -358,47 +259,28 @@ Running "make install" installs the files in the local TeX tree.
 %    \end{macrocode}
 % \end{environment}
 %
-% \begin{macro}{\figurename}
-% \begin{macro}{\tablename}
 % \begin{macro}{\contentsname}
 % Translate English to Chinese.
 %    \begin{macrocode}
-\renewcommand{\figurename}{图}
-\renewcommand{\tablename}{表}
-\renewcommand{\contentsname}{内容目录}
+\ctexset{contentsname = {内容目录}}
 %    \end{macrocode}
-% \end{macro}
-% \end{macro}
 % \end{macro}
 %
 %    \begin{macrocode}
 %      
-\DeclareCaptionLabelFormat{mynsfc@cap}{{\wuhao#1\rmfamily#2}}
+\DeclareCaptionLabelFormat{mynsfc@cap}{{\small#1\rmfamily#2}}
 \DeclareCaptionLabelSeparator{mynsfc@sep}{\hspace{1em}}
-\DeclareCaptionFont{mynsfc@capfont}{\wuhao}
+\DeclareCaptionFont{mynsfc@capfont}{\small}
 \captionsetup{labelformat=mynsfc@cap,
               labelsep=mynsfc@sep,
               font=mynsfc@capfont,
               justification=centering}
 %    \end{macrocode}
 %
-% \begin{macro}{CJKindent}
-% Indent with two Chinese full spaces.
-%    \begin{macrocode}
-%      
-\newlength\mynsfc@CJK@twochars
-\newcommand{\mynsfc@unicode}[2]{\char\numexpr#1*256+#2\relax}
-\def\mynsfc@CJK@space{\mynsfc@unicode{48}{7}}
-\def\CJKindent{%
-  \settowidth\mynsfc@CJK@twochars{\mynsfc@CJK@space\mynsfc@CJK@space}%
-  \parindent\mynsfc@CJK@twochars}
-%    \end{macrocode}
-% \end{macro}
-%
 % \begin{macro}{\maketitle}
 \renewcommand{\maketitle}{%
   \begin{center}%
-    \tocformat\erhao\@title%
+    \tocformat\LARGE\@title%
   \end{center}}
 % \end{macro}
 %
@@ -411,17 +293,12 @@ Running "make install" installs the files in the local TeX tree.
 %    \begin{macrocode}
 \ifmynsfc@arabicpart%
 \renewcommand{\thepart}{\arabic{part}.}
-\titleformat{\part}{\tocformat\sanhao}{\thepart}{1ex}{}
+\titleformat{\part}{\tocformat\Large}{\thepart}{1ex}{}
 \renewcommand{\thesection}{\arabic{section})}
 \renewcommand{\thesubsection}{\Alph{subsection})}
 \else%
-\def\nsfc@CJKnumber#1{\ifcase#1{零}\or%
-  {一}\or{二}\or{三}\or{四}\or{五}\or%
-  {六}\or{七}\or{八}\or{九}\or{十}\or%
-  {十一}\or{十二}\or{十三}\or{十四}\or{十五}\or%
-  {十六}\or{十七}\or{十八}\or{十九}\or{二十}\fi}
-\renewcommand{\thepart}{（\nsfc@CJKnumber{\c@part}）}
-\titleformat{\part}{\tocformat\sanhao}{\thepart}{0ex}{}
+\renewcommand{\thepart}{（\chinese{part}）}
+\titleformat{\part}{\tocformat\Large}{\thepart}{0ex}{}
 \renewcommand{\thesection}{\arabic{section}.}
 \renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
 \fi
@@ -429,13 +306,13 @@ Running "make install" installs the files in the local TeX tree.
 \titlespacing{\part}{0ex}{4ex}{2ex}
 
 \@addtoreset{section}{part}
-\titleformat{\section}{\tocformat\xiaosan}{\thesection}{0.25em}{}
+\titleformat{\section}{\tocformat\large}{\thesection}{0.25em}{}
 \titlespacing{\section}{0em}{4ex}{2ex}
 
-\titleformat{\subsection}{\tocformat\sihao}{\thesubsection}{0.25em}{}
+\titleformat{\subsection}{\tocformat\normalsize}{\thesubsection}{0.25em}{}
 \titlespacing{\subsection}{0em}{2ex}{1ex}
 
-\titleformat{\subsubsection}{\tocformat\banxiaosi}{\thesubsubsection}{0.25em}{}
+\titleformat{\subsubsection}{\tocformat\normalsize}{\thesubsubsection}{0.25em}{}
 \titlespacing{\subsubsection}{0em}{2ex}{1ex}
 %    \end{macrocode}
 % \end{macro}
@@ -450,7 +327,7 @@ Running "make install" installs the files in the local TeX tree.
 \def\AtEndDocument{\g@addto@macro\mynsfc@enddocumenthook}
 \def\@begindocumenthook{\mynsfc@begindocumenthook}
 \def\@enddocumenthook{\mynsfc@enddocumenthook}
-\AtBeginDocument{\ps@mynsfc@empty\CJKindent}
+\AtBeginDocument{\ps@mynsfc@empty}
 \endinput
 %</class>
 %    \end{macrocode}
