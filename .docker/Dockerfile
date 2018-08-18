@@ -14,14 +14,17 @@ RUN apt-get update -qq && \
     rm -r /var/lib/apt/lists/*
 
 # set up packages
+WORKDIR /tmp/
+
 # RUN TL_MIRROR=https://linux.xidian.edu.cn/mirrors/CTAN/systems/texlive/tlnet && \
 RUN TL_MIRROR=http://mirror.ctan.org/systems/texlive/tlnet && \
     wget --quiet ${TL_MIRROR}/install-tl-unx.tar.gz && \
     tar -xzf install-tl-unx.tar.gz && \
-    install-tl-20*/install-tl -repository ${TL_MIRROR} \
-                              -profile=/tmp/texlive.profile && \
-    rm -r install-tl-unx.tar.gz install-tl-20*
+    install-tl*/install-tl -repository ${TL_MIRROR} \
+                           -profile texlive.profile && \
+    rm -r install-tl-*
 
-RUN /usr/local/texlive/bin/x86_64-linux/tlmgr install $(cat /tmp/packages.txt)
-RUN /usr/local/texlive/bin/x86_64-linux/tlmgr path add
+RUN TLMGR=$(find /usr/local/texlive -name tlmgr) && \
+    ${TLMGR} install $(cat packages.txt) && ${TLMGR} path add && \
+    luaotfload-tool -v -u
     

@@ -15,6 +15,7 @@ hyperref
 l3kernel
 l3packages
 latex-bin
+latexmk
 lm
 logreq
 ltxfileinfo

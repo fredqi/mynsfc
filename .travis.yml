@@ -1,15 +1,18 @@
+language: ruby
+os: linux
 sudo: required
-
 services:
-  - docker
-
+- docker
 before_install:
-  - docker build -t fredqi/texlive -f .docker/Dockerfile .
-
+- docker pull fredqi/texlive
+# - docker build -t fredqi/texlive -f .docker/Dockerfile .
+before_script:
+- docker create --name=texlive -v `pwd`:/mynsfc -w /mynsfc -it fredqi/texlive
+- docker start texlive
 script:
-  - docker run -v `pwd`:/mynsfc -w /mynsfc fredqi/texlive make distclean
-  - docker run -v `pwd`:/mynsfc -w /mynsfc fredqi/texlive make zip
-
+- docker exec texlive bash -c "make distclean && make zip"
+after_script:
+- docker stop texlive && docker rm $(docker ps -aq)
 notifications:
   email: false
   slack: camerart:mf4rkoPcm628vBgvlbOk8zry
