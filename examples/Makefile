@@ -1,6 +1,6 @@
 NAME	= my-nsfc-proposal
 BIBTEX	= biber
-LATEX	= lualatex
+LATEX	= xelatex
 CLEANEXT= aux bbl bcf blg fls log out run.xml toc
 all:	$(NAME).pdf clean
 $(NAME).pdf: $(NAME).tex $(NAME).bib ../mynsfc.cls

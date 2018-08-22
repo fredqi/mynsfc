@@ -1,7 +1,7 @@
 NAME  = mynsfc
 EGFN  = examples/my-nsfc-proposal
 SHELL = bash
-LATEX = lualatex
+LATEX = xelatex
 PWD   = $(shell pwd)
 TEMP := $(shell mktemp -u -d -t dtxgen.XXXXXXXXXX)
 TDIR  = $(TEMP)/$(NAME)

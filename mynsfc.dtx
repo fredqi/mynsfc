@@ -72,7 +72,7 @@ Running "make install" installs the files in the local TeX tree.
 \documentclass{ltxdoc}
 \usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
 \usepackage[numbered]{hypdoc}
-\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage[UTF8,fontset=fandol,heading=true,12pt]{ctex}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
@@ -103,7 +103,8 @@ Running "make install" installs the files in the local TeX tree.
 % \changes{v1.01}{2016/09/05}{Added an option \texttt{toccolor} to show outline
 % in a given color specified by a HTML/CSS style hex code}
 % \changes{v1.20}{2018/08/05}{Changed to support Chinese based on the CTeX package.}
-%
+% \changes{v1.21}{2018/08/22}{Using xelatex for the FakeBold feature.}
+% 
 % \begin{abstract}
 % 用于自然基金申请书正文部分的撰写。
 % \end{abstract}
@@ -126,26 +127,25 @@ Running "make install" installs the files in the local TeX tree.
 %% Options
 \RequirePackage{kvoptions}
 \DeclareBoolOption[false]{subfig}
-\DeclareBoolOption[false]{arabicpart}
 \DeclareBoolOption[false]{boldtoc}
-\DeclareStringOption[kai]{tocfont}
+\DeclareStringOption[zhkai]{tocfont}
 \DeclareStringOption[0070c0]{toccolor}
 \ProcessKeyvalOptions*
 %% Load default class
-\LoadClass[a4paper,UTF8,zihao=-4,fontset=fandol]{ctexart}
+\LoadClass[a4paper,UTF8,fontset=fandol,zihao=-4]{ctexart}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
 %% Load required packages
 \RequirePackage{titlesec}
 \RequirePackage{marvosym}
-\RequirePackage{bm,amsmath,amssymb}
+\RequirePackage{amsmath,amssymb}
 \RequirePackage{paralist}
 \RequirePackage{graphicx}
 \ifmynsfc@subfig
 \RequirePackage[config]{subfig}
 \else
-\RequirePackage{subcaption}
+\RequirePackage{caption,subcaption}
 \fi
 \RequirePackage{xcolor}
 \RequirePackage{calc}
@@ -164,7 +164,7 @@ Running "make install" installs the files in the local TeX tree.
                 isbn=false,
                 defernumbers=true,
                 style=ieee]{biblatex}
-\appto{\bibfont}{\small}
+\appto{\bibbont}{\zihao{5}}
 \defbibheading{reftype}[\bibname]{\subsection*{#1}}
 \defbibheading{cvtype}[\bibname]{\paragraph{#1}}
 \defbibfilter{conference}{type=inproceedings or type=incollection}
@@ -218,11 +218,9 @@ Running "make install" installs the files in the local TeX tree.
 %
 % \begin{macro}{\tocformat}
 %    \begin{macrocode}
-\ifmynsfc@boldtoc
-  \newcommand{\tocformat}{\CJKfamily{\mynsfc@tocfont}\color[HTML]{\mynsfc@toccolor}\bfseries}
-\else
-  \newcommand{\tocformat}{\CJKfamily{\mynsfc@tocfont}\color[HTML]{\mynsfc@toccolor}}
-\fi
+\newcommand{\tocformat}{%
+  \CJKfamily{\mynsfc@tocfont}%
+  \color[HTML]{\mynsfc@toccolor}}
 %    \end{macrocode}
 % \end{macro}
 %    \begin{macrocode}
@@ -251,75 +249,39 @@ Running "make install" installs the files in the local TeX tree.
   \let\@oddfoot\@empty%
   \let\@evenfoot\@empty}
 %    \end{macrocode}
-%
-% \begin{environment}{hcomment}
-% Dimmed text used as hint after section titles. 
 %    \begin{macrocode}
-\newenvironment{hcomment}{\vskip-3pt\color[HTML]{\mynsfc@toccolor}}{\vskip6pt}
+\setCJKmainfont[AutoFakeBold=2]{FandolKai-Regular.otf}
+\setCJKfamilyfont{zhkai}[AutoFakeBold=2]{FandolKai-Regular.otf}
 %    \end{macrocode}
-% \end{environment}
-%
-% \begin{macro}{\contentsname}
-% Translate English to Chinese.
-%    \begin{macrocode}
-\ctexset{contentsname = {内容目录}}
-%    \end{macrocode}
-% \end{macro}
-%
-%    \begin{macrocode}
-%      
-\DeclareCaptionLabelFormat{mynsfc@cap}{{\small#1\rmfamily#2}}
-\DeclareCaptionLabelSeparator{mynsfc@sep}{\hspace{1em}}
-\DeclareCaptionFont{mynsfc@capfont}{\small}
-\captionsetup{labelformat=mynsfc@cap,
-              labelsep=mynsfc@sep,
-              font=mynsfc@capfont,
-              justification=centering}
-%    \end{macrocode}
-%
 % \begin{macro}{\maketitle}
 \renewcommand{\maketitle}{%
   \begin{center}%
-    \tocformat\LARGE\@title%
+    \kaishu\zihao{2}\@title%
   \end{center}}
 % \end{macro}
 %
-% \begin{macro}{\part}
-% \begin{macro}{\section}
-% \begin{macro}{\subsection}
-% \begin{macro}{\subsubsection}
-% \begin{macro}
-% Commands to format several levels of titles (part, section, subsection).
 %    \begin{macrocode}
-\ifmynsfc@arabicpart%
-\renewcommand{\thepart}{\arabic{part}.}
-\titleformat{\part}{\tocformat\Large}{\thepart}{1ex}{}
-\renewcommand{\thesection}{\arabic{section})}
-\renewcommand{\thesubsection}{\Alph{subsection})}
-\else%
-\renewcommand{\thepart}{（\chinese{part}）}
-\titleformat{\part}{\tocformat\Large}{\thepart}{0ex}{}
-\renewcommand{\thesection}{\arabic{section}.}
-\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
-\fi
-
-\titlespacing{\part}{0ex}{4ex}{2ex}
-
-\@addtoreset{section}{part}
-\titleformat{\section}{\tocformat\large}{\thesection}{0.25em}{}
+\ctexset{
+  part/name         = {（,）},
+  part/aftername    = {},
+  part/number       = \chinese{part},
+  part/format       = \tocformat\bfseries\zihao{4},
+  part/indent       = \parindent,
+}
+\titleformat{\section}[block]{\tocformat\zihao{4}}
+                             {\bfseries\hskip2em\thesection{.}}{1ex}{}
 \titlespacing{\section}{0em}{4ex}{2ex}
-
-\titleformat{\subsection}{\tocformat\normalsize}{\thesubsection}{0.25em}{}
+\titleformat{\subsection}{\tocformat\bfseries\zihao{-4}}
+                         {\thesubsection{.}}{0.25em}{}
 \titlespacing{\subsection}{0em}{2ex}{1ex}
-
-\titleformat{\subsubsection}{\tocformat\normalsize}{\thesubsubsection}{0.25em}{}
+\titleformat{\subsubsection}{\tocformat\bfseries\zihao{-4}}
+                            {\thesubsubsection{.}}{0.25em}{}
 \titlespacing{\subsubsection}{0em}{2ex}{1ex}
+\let\oldsection\section
+\renewcommand{\section}[2]{\oldsection{\textbf{#1}{#2}}}
+\@addtoreset{section}{part}
+\captionsetup{font=small}
 %    \end{macrocode}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-% \end{macro}
 %    \begin{macrocode}
 \let\mynsfc@begindocumenthook\@begindocumenthook
 \let\mynsfc@enddocumenthook\@enddocumenthook
