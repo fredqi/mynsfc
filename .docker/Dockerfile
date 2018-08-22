@@ -1,30 +1,11 @@
-FROM ubuntu:16.04
+FROM fredqi/texlive:minimal
 
-# COPY .docker/sources.list /etc/apt/sources.list
-COPY .docker/texlive.profile .docker/packages.txt /tmp/
+COPY .docker/packages.txt /tmp/
 
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update -qq && \
-    apt-get install -qq --no-install-recommends apt-utils && \
-    apt-get upgrade -qq && \
-    apt-get install -qq --no-install-recommends \
-	    wget ca-certificates perl fontconfig make zip && \
-    apt-get clean && \
-    rm -r /var/lib/apt/lists/*
-
-# set up packages
 WORKDIR /tmp/
 
-# RUN TL_MIRROR=https://linux.xidian.edu.cn/mirrors/CTAN/systems/texlive/tlnet && \
-RUN TL_MIRROR=http://mirror.ctan.org/systems/texlive/tlnet && \
-    wget --quiet ${TL_MIRROR}/install-tl-unx.tar.gz && \
-    tar -xzf install-tl-unx.tar.gz && \
-    install-tl*/install-tl -repository ${TL_MIRROR} \
-                           -profile texlive.profile && \
-    rm -r install-tl-*
-
 RUN TLMGR=$(find /usr/local/texlive -name tlmgr) && \
-    ${TLMGR} install $(cat packages.txt) && ${TLMGR} path add && \
+    ${TLMGR} install $(cat packages.txt) && \
+    ${TLMGR} path add && \
     luaotfload-tool -v -u
     
