@@ -1,7 +1,7 @@
-NAME	= my-nsfc-proposal
+NAME	= my-proposal
 BIBTEX	= biber
 LATEX	= xelatex
-CLEANEXT= aux bbl bcf blg fls log out run.xml toc
+CLEXT   = aux bbl bcf blg fls log out run.xml toc
 all:	$(NAME).pdf clean
 $(NAME).pdf: $(NAME).tex $(NAME).bib ../mynsfc.cls
 	test -L mynsfc.cls || ln -s ../mynsfc.cls .
@@ -9,11 +9,11 @@ $(NAME).pdf: $(NAME).tex $(NAME).bib ../mynsfc.cls
 	$(BIBTEX) $(NAME).bcf >/dev/null
 	$(LATEX) -recorder -interaction=nonstopmode $(NAME).tex > /dev/null
 	$(LATEX) -recorder -interaction=nonstopmode $(NAME).tex > /dev/null
-.PHONY:	clean distclean $(CLEANEXT)
-.SILENT:	$(CLEANEXT)
-$(CLEANEXT):
+.PHONY:	clean distclean $(CLEXT)
+.SILENT:$(CLEXT)
+$(CLEXT):
 	$(RM) $(NAME).$@
-clean: $(CLEANEXT)
+clean: $(CLEXT)
 distclean:	clean
-	$(RM) $(NAME).pdf
-	$(RM) mynsfc.cls
+	$(RM) $(NAME).pdf 
+	$(RM) mynsfc.cls $(NAME)-contents.tex

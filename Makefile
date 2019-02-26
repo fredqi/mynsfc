@@ -1,5 +1,6 @@
 NAME  = mynsfc
-EGFN  = examples/my-nsfc-proposal
+EGDIR = examples
+EGFN  = my-proposal
 SHELL = bash
 LATEX = xelatex
 PWD   = $(shell pwd)
@@ -8,6 +9,7 @@ TDIR  = $(TEMP)/$(NAME)
 VERS  = $(shell ltxfileinfo -v $(NAME).dtx)
 LOCAL = $(shell kpsewhich --var-value TEXMFLOCAL)
 UTREE = $(shell kpsewhich --var-value TEXMFHOME)
+CLEXT = aux bbl bcf blg fls glo gls hd idx ilg ind ins log out run.xml
 all:	$(NAME).pdf clean
 	$(MAKE) -C examples all
 $(NAME).pdf: $(NAME).dtx
@@ -16,36 +18,30 @@ $(NAME).pdf: $(NAME).dtx
 	if [ -f $(NAME).idx ]; then makeindex -q -s gind.ist -o $(NAME).ind $(NAME).idx; fi
 	$(LATEX) --recorder --interaction=nonstopmode $(NAME).dtx > /dev/null
 	$(LATEX) --recorder --interaction=nonstopmode $(NAME).dtx > /dev/null
-clean:
-	$(RM) $(NAME).{aux,fls,glo,gls,hd,idx,ilg,ind,ins,log,out}
+.PHONY:	$(CLEXT) clean distclean inst install zip
+.SILENT:$(CLEXT)
+$(CLEXT):
+	$(RM) $(NAME).$@
+clean:  $(CLEXT)
 	$(MAKE) -C examples clean
 distclean: clean
 	$(RM) $(NAME).{pdf,cls}
 	$(MAKE) -C examples distclean
 inst: all
 	mkdir -p $(UTREE)/{tex,source,doc}/latex/$(NAME)
-	cp $(NAME).dtx $(UTREE)/source/latex/$(NAME)
-	cp $(NAME).cls $(UTREE)/tex/latex/$(NAME)
-	cp $(NAME).pdf $(UTREE)/doc/latex/$(NAME)
-	cp $(EGFN).tex $(UTREE)/doc/latex/$(NAME)
-	cp $(EGFN).bib $(UTREE)/doc/latex/$(NAME)
-	cp $(EGFN).pdf $(UTREE)/doc/latex/$(NAME)
+	cp $(NAME).{dtx,cls,pdf} $(UTREE)/source/latex/$(NAME)
+	cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(LOCAL)/doc/latex/
+	cp $(EGDIR)/$(EGFN)-contents.tex $(LOCAL)/doc/latex/$(EGFN)-contents.tex
 install: all
 	sudo mkdir -p $(LOCAL)/{tex,source,doc}/latex/$(NAME)
-	sudo cp $(NAME).dtx $(LOCAL)/source/latex/$(NAME)
-	sudo cp $(NAME).cls $(LOCAL)/tex/latex/$(NAME)
-	sudo cp $(NAME).pdf $(LOCAL)/doc/latex/$(NAME)
-	sudo cp $(EGFN).bib $(LOCAL)/doc/latex/$(NAME)
-	sudo cp $(EGFN).tex $(LOCAL)/doc/latex/$(NAME)
-	sudo cp $(EGFN).pdf $(LOCAL)/doc/latex/$(NAME)
+	sudo cp $(NAME).{dtx,cls,pdf} $(LOCAL)/source/latex/$(NAME)
+	sudo cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(LOCAL)/doc/latex/$(EGFN).tex
+	sudo cp $(EGDIR)/$(EGFN)-contents.tex $(LOCAL)/doc/latex/$(EGFN)-contents.tex
 zip: all
 	mkdir -p $(TEMP)/{tex,source,doc}/latex/$(NAME)
-	cp $(NAME).dtx $(TEMP)/source/latex/$(NAME)
-	cp $(NAME).cls $(TEMP)/tex/latex/$(NAME)
-	cp $(NAME).pdf $(TEMP)/doc/latex/$(NAME)
-	cp $(EGFN).tex $(TEMP)/doc/latex/$(NAME)
-	cp $(EGFN).bib $(TEMP)/doc/latex/$(NAME)
-	cp $(EGFN).pdf $(TEMP)/doc/latex/$(NAME)
+	cp $(NAME).{dtx,cls,pdf} $(TEMP)/source/latex/
+	cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(TEMP)/doc/latex/
+	cp $(EGDIR)/$(EGFN)-contents.tex $(TEMP)/doc/latex/$(EGFN)-contents.tex
 	cd $(TEMP); zip -Drq $(TEMP)/$(NAME).tds.zip tex source doc
 	mkdir -p $(TDIR)
 	cp $(NAME).{pdf,dtx} README.md $(TDIR)

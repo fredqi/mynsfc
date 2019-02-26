@@ -20,7 +20,7 @@ See:     http://www.latex-project.org/lppl.txt
 \endpreamble
 \postamble
 
-Copyright (C) 2015-2018 by Fei Qi <fred.qi@ieee.org>
+Copyright (C) 2015-2019 by Fei Qi <fred.qi@ieee.org>
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License (LPPL), either
@@ -42,6 +42,11 @@ Running "make install" installs the files in the local TeX tree.
 \usedir{tex/latex/mynsfc}
 \generate{
   \file{\jobname.cls}{\from{\jobname.dtx}{class}}
+}
+\usedir{doc/latex/mynsfc}
+\nopreamble\nopostamble
+\generate{
+  \file{examples/my-proposal-contents.tex}{\from{\jobname.dtx}{content}}
 }
 %</install>
 %<install>\endbatchfile
@@ -69,13 +74,16 @@ Running "make install" installs the files in the local TeX tree.
     [2018/08/05 v1.20 A LuaLaTeX class for writing NSFC proposals.]
 %</class>
 %<*driver>
-\documentclass{ltxdoc}
-\usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
-\usepackage[numbered]{hypdoc}
-\usepackage[UTF8,fontset=fandol,heading=true,12pt]{ctex}
+\documentclass[subfig,boldtoc]{mynsfc}
+\usepackage{doc}
+\makeatletter
+\def\glossary@prologue{\section{修改记录}{}}%
+\def\index@prologue{\section{索引}{}}%
+\makeatother
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
+\bibliography{examples/my-proposal}
 \begin{document}
   \DocInput{\jobname.dtx}
 \end{document}
@@ -84,13 +92,6 @@ Running "make install" installs the files in the local TeX tree.
 %
 % \GetFileInfo{\jobname.dtx}
 % \DoNotIndex{\newcommand,\newenvironment}
-%
-% \title{\textsf{mynsfc} --- 国家自然科学基金申请书正文模板\thanks{此文档描述的
-% 模板版本为 \fileversion, 最后修改日期为
-% \filedate.} } \author{Fred Qi\thanks{E-mail: fred.qi@ieee.org}} \date{
-% \filedate 发布}
-%
-% \maketitle
 %
 % \changes{v1.00}{2015/08/18}{First public release}
 % \changes{v1.01}{2016/07/11}{Improved command \texttt{maketitle}}
@@ -104,21 +105,185 @@ Running "make install" installs the files in the local TeX tree.
 % in a given color specified by a HTML/CSS style hex code}
 % \changes{v1.20}{2018/08/05}{Changed to support Chinese based on the CTeX package.}
 % \changes{v1.21}{2018/08/22}{Using xelatex for the FakeBold feature.}
-% 
+%
+% \title{\textsf{mynsfc} --- 国家自然科学基金申请书正文模板\thanks{此文档描述的
+% 模板版本为 \fileversion, 最后修改日期为
+% \filedate.} }
+% \author{Fred Qi\thanks{E-mail: fred.qi@ieee.org}}
+% \date{\filedate 发布}
+%
+% \maketitle
+%
 % \begin{abstract}
 % 用于自然基金申请书正文部分的撰写。
 % \end{abstract}
 %
-% \section{使用说明}
+% \input{examples/my-proposal-contents.tex}
 %
-% 参见样例文件 \texttt{examples/my-nsfc-proposal.tex}。
+% \iffalse
+%<*content>
 %
-%\StopEventually{^^A
+参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。请勿删除或改动下述提纲标题及括号中的文字。
+
+\part{立项依据与研究内容（建议8000字以内）： }
+\label{part:proposal}
+
+\section{项目的立项依据}{（研究意义、国内外研究现状及发展动态分析，需结合科学研究发展趋势来论述科学意义；
+  或结合国民经济和社会发展中迫切需要解决的关键科技问题来论述其应用前景。附主要参考文献目录）；}
+\label{sec:background}
+
+\subsection{研究意义}
+\label{sec:motivation}
+
+略。
+
+\subsection{国内外研究现状}
+\label{sec:review}
+
+可以引用相关文献~\cite{bengio_representation_2013}对研究意义与国内外研究现状进行说明。
+
+\printbibliography[heading=reftype,title={参考文献}]
+
+\section{项目的研究内容、研究目标，以及拟解决的关键科学问题}{（此部分为重点阐述内容）；}
+\label{sec:contents}
+
+\subsection{研究内容}
+
+略。
+
+\begin{figure}[h]
+  \centering
+  
+  \caption{测试图表标题。}
+  \label{fig:test}
+\end{figure}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{cc}
+    \hline
+    标题 & 内容 \\
+    \hline
+    科目1 & 内容1 \\
+    \hline
+  \end{tabular}
+  \caption{测试图表标题。}
+  \label{tab:test}
+\end{table}
+
+\subsection{研究目标}
+\label{sec:goals}
+
+略。
+
+\subsection{拟解决的关键科学问题}
+
+略。
+
+\section{拟采取的研究方案及可行性分析}{（包括研究方法、技术路线、实验手段、关键技术等说明）；}
+\label{sec:approach}
+
+略。
+
+\section{本项目的特色与创新之处； }{}
+\label{sec:innovation}
+
+略。
+
+\section{年度研究计划及预期研究结果}{（包括拟组织的重要学术交流活动、国际合作与交
+  流计划等）。}
+\label{sec:plans}
+
+略。
+
+\part{研究基础与工作条件}
+\label{cha:foundations}
+
+\section{研究基础}{（与本项目相关的研究工作积累和已取得的研究工作成绩）；}
+\label{sec:achievements}
+
+\begin{refsection}
+  
+  申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。下面命令
+  \texttt{initauthors} 中的哈希字符串可以在Biber/bibtex 生成的文件
+  \texttt{*.bbl} 中找到。
+  
+  需要强调的作者列表有两种形式，分别适用于不同版本的\texttt{biblatex}。
+  \begin{description}
+  \item[3.3+ (20160301)] 由于姓名处理的宏更新，请使用哈希字符串列表指定需要强调
+    的作者。
+\begin{verbatim}
+    \initauthors{{72b3cccfc646adeb1d6b20320b56fd7d}}
+\end{verbatim}
+  \item[3.2- (20151228)] 使用旧式的姓名处理宏，使用下列形式的作者列表。
+\begin{verbatim}
+    \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
+\end{verbatim}
+  \end{description}
+  
+  % \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
+  \initauthors{{72b3cccfc646adeb1d6b20320b56fd7d}}
+  \printbibliography[prefixnumbers=J,heading=cvtype,title={相关工作}]
+  
+\end{refsection}
+
+\section{工作条件}{（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利
+  用国家实验室、国家重点实验室和部门重点实验室等研究基地的计划与落实情况）；}
+\label{sec:condition}
+
+略。
+\section{正在承担的与本项目相关的科研项目情况}{（申请人和项目组主要参与者正在承担
+  的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，
+  要注明项目的名称和编号、经费来源、起止年月、与本项目的关系及负责的内容等）；}
+\label{sec:projects}
+
+略。
+
+\section{完成国家自然科学基金项目情况}{（对申请人负责的前一个已结题科学基金项目
+  （项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另
+  附该已结题项目研究工作总结摘要（限500字）和相关成果的详细目录）。}
+\label{sec:finished-project}
+
+略。
+
+\part{其他需要说明的问题}
+\label{cha:others}
+
+\section{申请人同年申请不同类型的国家自然科学基金项目情况}{（列明同年申请的其他项
+  目的项目类型、项目名称信息，并说明与本项目之间的区别与联系。}
+  
+无。
+
+\section{具有高级专业技术职务（职称）的申请人或者主要参与者是否存在同年申请或者参
+  与申请国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的
+  姓名，申请或参与申请的其他项目的项目类型、项目名称、单位名称、上述人员在该项目
+  中是申请人还是参与者，并说明单位不一致原因）。}{}
+\label{sec:inconsistent}
+
+无。
+
+\section{具有高级专业技术职务（职称）的申请人或者主要参与者是否存在与正在承担的国
+  家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，正
+  在承担项目的批准号、项目类型、项目名称、单位名称、起止年月，并说明单位不一致原
+  因）。}{}
+  
+无。
+
+\section{其他。}{}
+
+使用方法参见样例文件 \texttt{my-proposal.tex}。
+
+%</content>
+% \fi
+% 
+%\StopEventually{
 %  \PrintChanges
 %  \PrintIndex
 %}
 %
-% \section{实现}
+% \part{附录}
+% \appendix
+% \section{实现}{}
 %
 %<*class>
 %    \begin{macrocode}
@@ -164,7 +329,8 @@ Running "make install" installs the files in the local TeX tree.
                 isbn=false,
                 defernumbers=true,
                 style=ieee]{biblatex}
-\appto{\bibbont}{\zihao{5}}
+\appto{\bibfont}{\zihao{-5}}
+\setlength{\itemsep}{0pt}
 \defbibheading{reftype}[\bibname]{\subsection*{#1}}
 \defbibheading{cvtype}[\bibname]{\paragraph{#1}}
 \defbibfilter{conference}{type=inproceedings or type=incollection}
@@ -250,8 +416,8 @@ Running "make install" installs the files in the local TeX tree.
   \let\@evenfoot\@empty}
 %    \end{macrocode}
 %    \begin{macrocode}
-\setCJKmainfont[AutoFakeBold=2]{FandolKai-Regular.otf}
-\setCJKfamilyfont{zhkai}[AutoFakeBold=2]{FandolKai-Regular.otf}
+%\setCJKmainfont[AutoFakeBold=2]{FandolKai-Regular.otf}
+%\setCJKfamilyfont{zhkai}[AutoFakeBold=2]{FandolKai-Regular.otf}
 %    \end{macrocode}
 % \begin{macro}{\maketitle}
 \renewcommand{\maketitle}{%
