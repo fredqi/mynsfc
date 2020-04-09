@@ -3,6 +3,7 @@ EGDIR = examples
 EGFN  = my-proposal
 SHELL = bash
 LATEX = xelatex
+BIB   = biber
 PWD   = $(shell pwd)
 TEMP := $(shell mktemp -u -d -t dtxgen.XXXXXXXXXX)
 TDIR  = $(TEMP)/$(NAME)
@@ -14,6 +15,7 @@ all:	$(NAME).pdf clean
 	$(MAKE) -C examples all
 $(NAME).pdf: $(NAME).dtx
 	$(LATEX) -shell-escape -recorder -interaction=batchmode $(NAME).dtx > /dev/null
+	$(BIB) $(NAME).bcf > /dev/null
 	if [ -f $(NAME).glo ]; then makeindex -q -s gglo.ist -o $(NAME).gls $(NAME).glo; fi
 	if [ -f $(NAME).idx ]; then makeindex -q -s gind.ist -o $(NAME).ind $(NAME).idx; fi
 	$(LATEX) --recorder --interaction=nonstopmode $(NAME).dtx > /dev/null

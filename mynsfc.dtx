@@ -105,10 +105,11 @@ Running "make install" installs the files in the local TeX tree.
 % in a given color specified by a HTML/CSS style hex code}
 % \changes{v1.20}{2018/08/05}{Changed to support Chinese based on the CTeX package.}
 % \changes{v1.21}{2018/08/22}{Using xelatex for the FakeBold feature.}
+% \changes{v1.22}{2019/04/07}{Added macros render author annotations with biblatex.}
+% \changes{v1.22}{2019/04/09}{Added biblatex string \texttt{patentcn}.}
 %
-% \title{\textsf{mynsfc} --- 国家自然科学基金申请书正文模板\thanks{此文档描述的
-% 模板版本为 \fileversion, 最后修改日期为
-% \filedate.} }
+% \title{\textsf{mynsfc}---国家自然科学基金申请书正文模板\thanks{此文
+% 档描述的模板版本为 \fileversion, 最后修改日期为\filedate.} }
 % \author{Fred Qi\thanks{E-mail: fred.qi@ieee.org}}
 % \date{\filedate 发布}
 %
@@ -204,13 +205,22 @@ Running "make install" installs the files in the local TeX tree.
 
 \begin{refsection}
   
-  申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。下面命令
-  \texttt{initauthors} 中的哈希字符串可以在Biber/bibtex 生成的文件
-  \texttt{*.bbl} 中找到。
+  申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。
+
+  在使用\texttt{biblatex} 3.4以上版本的情况下，建议使用
+  \texttt{biblatex}提供数据标注功能。如第二个作者是自己，用粗体标记自己的姓
+  名；且为文章的通记作者，加上角标``*''进行标注。则仅需要在bibtex文
+  件的相应条目中增加以下标记：
+\begin{verbatim}
+  author = "Xia, C and Qi, F and Shi, G and Wang, P",
+  author+an = {2=self;2:family=corr},
+\end{verbatim}
   
-  需要强调的作者列表有两种形式，分别适用于不同版本的\texttt{biblatex}。
+  需要强调的作者列表有三种形式，分别适用于不同版本的\texttt{biblatex}。
   \begin{description}
-  \item[3.3+ (20160301)] 由于姓名处理的宏更新，请使用哈希字符串列表指定需要强调
+  \item[3.4+ (20160301)] 请使用\texttt{biblatex}中提供的数据标注(Data
+    annotation)功能。
+  \item[3.3 (20160301)] 由于姓名处理的宏更新，请使用哈希字符串列表指定需要强调
     的作者。
 \begin{verbatim}
     \initauthors{{72b3cccfc646adeb1d6b20320b56fd7d}}
@@ -220,9 +230,9 @@ Running "make install" installs the files in the local TeX tree.
     \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
 \end{verbatim}
   \end{description}
-  
-  % \forcsvlist{\listadd\boldnames}{{Qi, F\bibinitperiod}}
-  \initauthors{{72b3cccfc646adeb1d6b20320b56fd7d}}
+  其中命令\texttt{initauthors}中的所需要的姓名的哈希字符串可以
+  在Biber/bibtex 生成的文件\texttt{*.bbl} 中找到。
+
   \printbibliography[prefixnumbers=J,heading=cvtype,title={相关工作}]
   
 \end{refsection}
@@ -298,6 +308,14 @@ Running "make install" installs the files in the local TeX tree.
 \ProcessKeyvalOptions*
 %% Load default class
 \LoadClass[a4paper,UTF8,fontset=fandol,zihao=-4]{ctexart}
+\setmainfont{Times New Roman}
+\setCJKmainfont{FandolSong}[%
+    Extension   = .otf,
+    UprightFont = *-Regular,
+    BoldFont    = *-Bold]
+\setCJKfamilyfont{zhkai}{FandolKai-Regular.otf}[AutoFakeBold=2]
+\RequirePackage[hmargin=1.25in,vmargin=1in]{geometry}
+\setlength{\parskip}{0pt \@plus2pt \@minus0pt}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -325,18 +343,37 @@ Running "make install" installs the files in the local TeX tree.
 %    \begin{macrocode}
 %% Load and setup package biblatex
 \RequirePackage[backend=biber,
-                url=true,
+                doi=true,
+                url=false,
                 isbn=false,
-                defernumbers=true,
+                defernumbers=true,                
+                citestyle=numeric-comp,
                 style=ieee]{biblatex}
-\appto{\bibfont}{\zihao{-5}}
-\setlength{\itemsep}{0pt}
+
+\setlength{\bibitemsep}{2pt}
+\appto{\bibfont}{\normalfont\zihao{5}\linespread{1}\selectfont}
 \defbibheading{reftype}[\bibname]{\subsection*{#1}}
-\defbibheading{cvtype}[\bibname]{\paragraph{#1}}
+\defbibheading{cvtype}[\bibname]{\subsubsection*{#1}}
 \defbibfilter{conference}{type=inproceedings or type=incollection}
+
+\NewBibliographyString{patentcn}
+
+\DefineBibliographyStrings{english}{%
+  and      = {\&},
+  patentcn = {中国发明专利\adddot},
+}
 
 \RequirePackage{xpatch}% or use http://tex.stackexchange.com/a/40705
 
+\@ifpackagelater{biblatex}{2016/05/10}
+{
+\renewcommand*{\mkbibnamegiven}[1]{%
+  \ifitemannotation{self}{\textbf{#1}}{#1}}
+\renewcommand*{\mkbibnamefamily}[1]{%
+  \ifitemannotation{self}{\textbf{#1}}{#1}%
+  \ifpartannotation{family}{corr}{\textsuperscript{*}}{}}
+}
+{
 \@ifpackagelater{biblatex}{2016/03/01}
 {
 \newcommand*{\list@bold@authors}{}
@@ -362,7 +399,7 @@ Running "make install" installs the files in the local TeX tree.
 \xapptobibmacro{name:family}{\endgroup}{}{}{}{}
 \xapptobibmacro{name:given-family}{\endgroup}{}{}{}{}
 \xapptobibmacro{name:family-given}{\endgroup}{}{}{}{}
-%\xapptobibmacro{name:delim}{\endgroup}{}{}
+% \xapptobibmacro{name:delim}{\endgroup}{}{}
 }
 {
 \newbibmacro*{name:bold}[2]{%
@@ -380,6 +417,7 @@ Running "make install" installs the files in the local TeX tree.
 \xapptobibmacro{name:last-first}{\endgroup}{}{}
 \xapptobibmacro{name:delim}{\endgroup}{}{}
 }
+}
 %    \end{macrocode}
 %
 % \begin{macro}{\tocformat}
@@ -390,24 +428,6 @@ Running "make install" installs the files in the local TeX tree.
 %    \end{macrocode}
 % \end{macro}
 %    \begin{macrocode}
-% Define page layout
-\setlength{\textwidth}{\paperwidth}
-\setlength{\textheight}{\paperheight}
-\setlength\marginparwidth{0mm}
-\setlength\marginparsep{0mm}
-\addtolength{\textwidth}{-50mm}
-\setlength{\oddsidemargin}{0mm}
-\setlength{\evensidemargin}{\oddsidemargin}
-\setlength{\headheight}{20pt}
-\setlength{\topskip}{0mm}
-\setlength{\skip\footins}{15pt}
-\setlength{\topmargin}{-15mm}
-\setlength{\footskip}{13mm}
-\setlength{\headsep}{6mm}
-\addtolength{\textheight}{-50mm}
-\setlength{\parskip}{0pt \@plus2pt \@minus0pt}
-%    \end{macrocode}
-%    \begin{macrocode}
 % Define page styles      
 \def\ps@mynsfc@empty{%
   \let\@oddhead\@empty%
@@ -415,40 +435,63 @@ Running "make install" installs the files in the local TeX tree.
   \let\@oddfoot\@empty%
   \let\@evenfoot\@empty}
 %    \end{macrocode}
-%    \begin{macrocode}
-%\setCJKmainfont[AutoFakeBold=2]{FandolKai-Regular.otf}
-%\setCJKfamilyfont{zhkai}[AutoFakeBold=2]{FandolKai-Regular.otf}
-%    \end{macrocode}
 % \begin{macro}{\maketitle}
+%    \begin{macrocode}
 \renewcommand{\maketitle}{%
   \begin{center}%
-    \kaishu\zihao{2}\@title%
+    \kaishu\zihao{3}\bfseries\@title%
   \end{center}}
+%    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\part}
 %    \begin{macrocode}
 \ctexset{
   part/name         = {（,）},
   part/aftername    = {},
   part/number       = \chinese{part},
   part/format       = \tocformat\bfseries\zihao{4},
-  part/indent       = \parindent,
+  part/indent       = 2em,
 }
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\section}
+%    \begin{macrocode}
 \titleformat{\section}[block]{\tocformat\zihao{4}}
                              {\bfseries\hskip2em\thesection{.}}{1ex}{}
 \titlespacing{\section}{0em}{4ex}{2ex}
-\titleformat{\subsection}{\tocformat\bfseries\zihao{-4}}
-                         {\thesubsection{.}}{0.25em}{}
-\titlespacing{\subsection}{0em}{2ex}{1ex}
-\titleformat{\subsubsection}{\tocformat\bfseries\zihao{-4}}
-                            {\thesubsubsection{.}}{0.25em}{}
-\titlespacing{\subsubsection}{0em}{2ex}{1ex}
 \let\oldsection\section
 \renewcommand{\section}[2]{\oldsection{\textbf{#1}{#2}}}
 \@addtoreset{section}{part}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\subsection}
+%    \begin{macrocode}
+\titleformat{\subsection}{\tocformat\bfseries\zihao{-4}}
+                         {\thesubsection{.}}{0.25em}{}
+\titlespacing{\subsection}{0em}{2ex}{1ex}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\subsubsection}
+%    \begin{macrocode}
+\renewcommand{\thesubsubsection}{(\arabic{subsubsection})}
+\titleformat{\subsubsection}{\CJKfamily{\mynsfc@tocfont}\bfseries\zihao{-4}}
+                            {\thesubsubsection}{0.25em}{}
+\titlespacing{\subsubsection}{0ex}{2ex}{1ex}
 \captionsetup{font=small}
 %    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cemph}
 %    \begin{macrocode}
+\newcommand{\cemph}[1]{\textbf{\color[HTML]{\mynsfc@toccolor}#1}}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macrocode}
 \let\mynsfc@begindocumenthook\@begindocumenthook
 \let\mynsfc@enddocumenthook\@enddocumenthook
 \def\AtBeginDocument{\g@addto@macro\mynsfc@begindocumenthook}

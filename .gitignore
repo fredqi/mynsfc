@@ -37,6 +37,9 @@ mynsfc*.zip
 examples/mynsfc.cls
 examples/my-nsfc-proposal.pdf
 
+## Package created files
+examples/my-proposal-contents.tex
+
 ## Auxiliary and intermediate files from other packages:
 
 # algorithms
