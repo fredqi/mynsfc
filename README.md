@@ -1,4 +1,4 @@
-![.github/workflows/build.yml](https://github.com/fredqi/mynsfc/workflows/.github/workflows/build.yml/badge.svg)
+![Build mynsfc package](https://github.com/fredqi/mynsfc/workflows/Build%20mynsfc%20package/badge.svg)
 ----
 # mynsfc
 
