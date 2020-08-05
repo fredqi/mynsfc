@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/fredqi/mynsfc.svg?branch=master)](https://travis-ci.com/fredqi/mynsfc)
+![.github/workflows/build.yml](https://github.com/fredqi/mynsfc/workflows/.github/workflows/build.yml/badge.svg)
 ----
 # mynsfc
 

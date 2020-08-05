@@ -1,0 +1,30 @@
+name: Build mynsfc package
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v2
+      - name: Build the package
+        uses: docker://fredqi/texlive:mynsfc
+        with:
+          entrypoint: /bin/bash
+          args: -c make
+      - name: Check results
+        run: |
+          ls -lh mynsfc.pdf
+          file mynsfc.pdf | grep -q 'PDF'
+
+  build_container:
+    runs-on: ubuntu-latest
+    container: fredqi/texlive:mynsfc
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v2
+      - name: Build the package
+        run: make
+      - name: Check results
+        run: |
+          ls -lh mynsfc.pdf
