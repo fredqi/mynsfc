@@ -15,5 +15,8 @@ My LaTeX template for writing the main body of NSFC proposals.
 
 # 日志
 
+- 20200818 本年度自然科学基金今日放榜，本人面上项目有幸中选。特将申请基金所使用
+  的 XeLaTeX 模板共享，以方便其他希望使用 XeLaTeX/LaTeX 的申请人。
+
 - 20150818 本年度自然科学基金今日放榜，本人面上项目有幸中选。特将申请基金所使用
   的 XeLaTeX 模板共享，以方便其他希望使用 XeLaTeX/LaTeX 的申请人。
