@@ -40,10 +40,12 @@ install: all
 	sudo cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(LOCAL)/doc/latex/$(EGFN).tex
 	sudo cp $(EGDIR)/$(EGFN)-contents.tex $(LOCAL)/doc/latex/$(EGFN)-contents.tex
 zip: all
-	mkdir -p $(TEMP)/{tex,source,doc}/latex/$(NAME)
-	cp $(NAME).{dtx,cls,pdf} $(TEMP)/source/latex/
-	cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(TEMP)/doc/latex/
-	cp $(EGDIR)/$(EGFN)-contents.tex $(TEMP)/doc/latex/$(EGFN)-contents.tex
+	mkdir -p $(TEMP)/{tex,source,doc}/xelatex/$(NAME)
+	cp $(NAME).cls $(TEMP)/tex/xelatex/$(NAME)/
+	cp $(NAME).dtx $(TEMP)/source/xelatex/$(NAME)/
+	cp $(NAME).pdf $(TEMP)/doc/xelatex/$(NAME)/
+	cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(TEMP)/doc/xelatex/$(NAME)/
+	cp $(EGDIR)/$(EGFN)-contents.tex $(TEMP)/doc/xelatex/$(NAME)/
 	cd $(TEMP); zip -Drq $(TEMP)/$(NAME).tds.zip tex source doc
 	mkdir -p $(TDIR)
 	cp $(NAME).{pdf,dtx} README.md $(TDIR)
