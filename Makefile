@@ -11,7 +11,7 @@ VERS  = $(shell ltxfileinfo -v $(NAME).dtx)
 LOCAL = $(shell kpsewhich --var-value TEXMFLOCAL)
 UTREE = $(shell kpsewhich --var-value TEXMFHOME)
 CLEXT = aux bbl bcf blg fls glo gls hd idx ilg ind ins log out run.xml
-all:	$(NAME).pdf clean
+all:	$(NAME).pdf
 	$(MAKE) -C examples all
 $(NAME).pdf: $(NAME).dtx
 	$(LATEX) -shell-escape -recorder -interaction=batchmode $(NAME).dtx > /dev/null

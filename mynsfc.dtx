@@ -29,7 +29,7 @@ This work consists of the file mynsfc.dtx and the derived files
 mynsfc.cls, mynsfc.def, and the example files.
 
 ----------------------------------------------------------------
-mynsfc --- A XeLaTeX template for writing the main body of NSFC proposals.
+mynsfc --- A CTeX-based template for writing the main body of NSFC proposals.
 Author:  Fei Qi <fred.qi@ieee.org>
 ----------------------------------------------------------------
 
@@ -79,14 +79,15 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<class>\ProvidesClass{mynsfc}
 %<*class>
-    [2020/08/18 v1.30 A XeLaTeX class for writing NSFC proposals.]
+    [2026/01/25 v2.00 A CTeX-based class for writing NSFC proposals.]
 %</class>
 %<*driver>
 \documentclass{mynsfc}
 \usepackage{doc}
+\renewcommand{\generalname}{要点}
 \makeatletter
-\def\glossary@prologue{\section{修改记录}{}}%
-\def\index@prologue{\section{索引}{}}%
+\def\glossary@prologue{\section{修改记录}}%
+\def\index@prologue{\section{索引}}%
 \makeatother
 \EnableCrossrefs
 \CodelineIndex
@@ -105,25 +106,18 @@ Author:  Fei Qi <fred.qi@ieee.org>
 % \GetFileInfo{\jobname.dtx}
 % \DoNotIndex{\newcommand,\newenvironment}
 %
-% \changes{v1.00}{2015/08/18}{First public release}
-% \changes{v1.01}{2016/07/11}{Improved command \texttt{maketitle}}
-% \changes{v1.01}{2016/07/11}{Added an option \texttt{arabicpart}}
-% \changes{v1.01}{2016/07/11}{Author highlight with \texttt{biblatex} newer than
-% 3.3 (2016-03-01)}
-% \changes{v1.01}{2016/09/05}{Added options \texttt{tocfont} and
-% \texttt{boldtoc} to select font on headings}
-% \changes{v1.01}{2016/09/05}{Using kvoptions to handle package options}
-% \changes{v1.01}{2016/09/05}{Added an option \texttt{toccolor} to show outline
-% in a given color specified by a HTML/CSS style hex code}
-% \changes{v1.20}{2018/08/05}{Changed to support Chinese based on the CTeX package.}
-% \changes{v1.21}{2018/08/22}{Using xelatex for the FakeBold feature.}
-% \changes{v1.22}{2019/04/07}{Added macros render author annotations with biblatex.}
-% \changes{v1.22}{2019/04/09}{Added biblatex string \texttt{patentcn}.}
-% \changes{v1.30}{2021/08/18}{Release based on a newly funded proposal.}
+% \changes{1.00}{2015/08/18}{首次公开发布}
+% \changes{1.01}{2016/07/11}{增加 \texttt{arabicpart} 选项}
+% \changes{1.01}{2016/07/11}{支持 \texttt{biblatex} 3.3+ (2016-03-01) 的作者高亮功能}
+% \changes{1.01}{2016/09/05}{增加 \texttt{tocfont} 和 \texttt{boldtoc} 选项以设定标题字体}
+% \changes{1.20}{2018/08/05}{基于 CTeX 宏包重构以支持中文}
+% \changes{1.21}{2018/08/22}{使用 XeLaTeX 的 FakeBold 特性}
+% \changes{1.22}{2019/04/07}{增强\texttt{biblatex}参考文献格式}
+% \changes{1.30}{2021/08/18}{基于最新获资助的项目申请书发布}
+% \changes{2.00}{2026/01/25}{\textbf{适配2026版面上项目正文模板}}
 %
 % \iffalse
 %<*example>
-%
 \documentclass{mynsfc}
 \addbibresource{my-proposal.bib}
 \begin{document}
@@ -225,10 +219,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %</examplebib>
 % \fi
 % 
-%\StopEventually{
-%  \PrintChanges
-%  \PrintIndex
-%}
+% \StopEventually{\PrintChanges}
 %
 % \section{实现}
 %
@@ -236,9 +227,20 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %    \begin{macrocode}
 \ExecuteOptions{}
 \ProcessOptions*
-%% Options
+%    \end{macrocode}
+% \begin{macro}{kvoptions}
+% \changes{1.01}{2016/09/05}{使用\texttt{kvoptions}处理宏包选项}
+%    \begin{macrocode}
 \RequirePackage{kvoptions}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\toccolor}
+% \changes{1.01}{2016/09/05}{增加\texttt{toccolor}选项支持HTML/CSS格式标题颜色设置}
+%    \begin{macrocode}
 \DeclareStringOption[0070c0]{toccolor}
+%    \end{macrocode}
+% \end{macro}
+%   \begin{macrocode}
 \ProcessKeyvalOptions*
 %% Load customizable strings
 \input{mynsfc.def}
@@ -264,7 +266,6 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %
 %    \begin{macrocode}
 %% Load required packages
-% \RequirePackage{titlesec}
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{graphicx}
 \RequirePackage{caption,subcaption}
@@ -291,14 +292,21 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \defbibheading{reftype}[\mynsfcrefname]{\subsection*{#1}}
 \defbibheading{cvtype}[\mynsfccvname]{\subsubsection*{#1}}
 \defbibfilter{conference}{type=inproceedings or type=incollection}
-
+%    \end{macrocode}
+% \begin{macro}{patentcn}
+% \changes{1.22}{2019/04/09}{增文献字符串\texttt{patentcn}}
+%    \begin{macrocode}
 \NewBibliographyString{patentcn}
 
 \DefineBibliographyStrings{english}{%
   and      = {\&},
   patentcn = {\mynsfcpatentcn\adddot},
 }
-
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\mkbibnamegiven, \mkbibnamefamily}
+% \changes{1.22}{2019/04/07}{使用\texttt{biblatex}进行作者标注}
+%    \begin{macrocode}
 %% Author highlighting (requires biblatex 3.4+, May 2016)
 \renewcommand*{\mkbibnamegiven}[1]{%
   \ifitemannotation{self}{\textbf{#1}}{#1}}
@@ -306,6 +314,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
   \ifitemannotation{self}{\textbf{#1}}{#1}%
   \ifpartannotation{family}{corr}{\textsuperscript{*}}{}}
 %    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\tocformat}
 %    \begin{macrocode}
@@ -323,6 +332,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
   \let\@evenfoot\@empty}
 %    \end{macrocode}
 % \begin{macro}{\maketitle}
+% \changes{1.01}{2016/07/11}{改进 \texttt{maketitle} 命令}
 %    \begin{macrocode}
 \renewcommand{\maketitle}{%
   \begin{center}%
@@ -335,6 +345,8 @@ Author:  Fei Qi <fred.qi@ieee.org>
 % \end{macro}
 %
 % \begin{macro}{\part}
+% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置格式}
+% \changes{2.00}{2026/01/24}{接受两个参数以设定标题与副标题}
 %    \begin{macrocode}
 \ctexset{
   part/name         = {（,）},
@@ -353,8 +365,8 @@ Author:  Fei Qi <fred.qi@ieee.org>
   \fi}
 %    \end{macrocode}
 % \end{macro}
-% 
-% \begin{macro}{\section}
+% \begin{macro}{\subsubsection, \subsection, \section}
+% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置格式}
 %    \begin{macrocode}
 \newcommand{\mynsfc@secnumber}{%
   \ifnum\value{part}<4\relax\bfseries\fi\thesection}
@@ -368,11 +380,6 @@ Author:  Fei Qi <fred.qi@ieee.org>
   section/hang         = false,
 }
 \@addtoreset{section}{part}
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\subsection}
-%    \begin{macrocode}
 \ctexset{
   subsection/format       = \tocformat\bfseries\zihao{-4},
   subsection/number       = \thesubsection,
@@ -381,15 +388,9 @@ Author:  Fei Qi <fred.qi@ieee.org>
   subsection/afterskip    = 1ex,
   subsection/indent       = 0em,
 }
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\subsubsection}
-%    \begin{macrocode}
-\renewcommand{\thesubsubsection}{(\arabic{subsubsection})}
 \ctexset{
   subsubsection/format       = \tocformat\bfseries\zihao{-4},
-  subsubsection/number       = \thesubsubsection,
+  subsubsection/number       = \arabic{subsubsection},
   subsubsection/aftername    = {\hspace{0.25em}},
   subsubsection/beforeskip   = 2ex,
   subsubsection/afterskip    = 1ex,
@@ -405,13 +406,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %    \end{macrocode}
 % \end{macro}
 % 
-% \begin{macrocode}
-\let\mynsfc@begindocumenthook\@begindocumenthook
-\let\mynsfc@enddocumenthook\@enddocumenthook
-\def\AtBeginDocument{\g@addto@macro\mynsfc@begindocumenthook}
-\def\AtEndDocument{\g@addto@macro\mynsfc@enddocumenthook}
-\def\@begindocumenthook{\mynsfc@begindocumenthook}
-\def\@enddocumenthook{\mynsfc@enddocumenthook}
+%    \begin{macrocode}
 \AtBeginDocument{\ps@mynsfc@empty}
 \endinput
 %</class>

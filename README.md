@@ -2,10 +2,12 @@
 ----
 # mynsfc
 
-My XeLaTeX template for writing NSFC proposals.
+A CTeX-based template for writing the **main body** of NSFC proposals. 
+
+> **Note**: The included example (`examples/my-proposal.tex`) currently demonstrates the structure for the **General Program**. Users applying for other programs (e.g., Young Scientists Fund, Key Program) should adjust the section titles according to the specific guidelines.
 
 ----------------------------------------------------------------
->  mynsfc --- A XeLaTeX template for writing NSFC proposals. <br/>
+>  mynsfc --- A CTeX-based template for writing NSFC proposals. <br/>
 >  Author:  Fei Qi <br/>
 >  E-mail:  fred.qi@ieee.org <br/>
 >  License: Released under the LaTeX Project Public License v1.3c or later <br/>
