@@ -31,14 +31,17 @@
 *.pdfsync
 
 ## Package files:
-mynsfc.cls
 mynsfc.pdf
 mynsfc*.zip
-examples/mynsfc.cls
-examples/my-nsfc-proposal.pdf
+examples/my-proposal.tex
+examples/my-proposal.bib
+examples/my-proposal.pdf
 
-## Package created files
-examples/my-proposal-contents.tex
+## Package generated files:
+*.cls
+*.def
+*.sty
+*.ins
 
 ## Auxiliary and intermediate files from other packages:
 
@@ -119,3 +122,4 @@ sympy-plots-for-*.tex/
 *.xdy
 
 auto/
+build/
