@@ -3,6 +3,7 @@ EGDIR = examples
 EGFN  = my-proposal
 SHELL = bash
 LATEX = xelatex
+LATEXFLAGS = -shell-escape -recorder -interaction=batchmode
 BIB   = biber
 PWD   = $(shell pwd)
 TEMP := $(shell mktemp -u -d -t dtxgen.XXXXXXXXXX)
@@ -11,15 +12,21 @@ VERS  = $(shell ltxfileinfo -v $(NAME).dtx)
 LOCAL = $(shell kpsewhich --var-value TEXMFLOCAL)
 UTREE = $(shell kpsewhich --var-value TEXMFHOME)
 CLEXT = aux bbl bcf blg fls glo gls hd idx ilg ind ins log out run.xml
+export NAME EGFN LATEX LATEXFLAGS BIB CLEXT
+GENERATED = $(NAME).cls $(NAME).def $(NAME).ins examples/$(EGFN).tex examples/$(EGFN).bib
+
 all:	$(NAME).pdf
 	$(MAKE) -C examples all
-$(NAME).pdf: $(NAME).dtx
-	$(LATEX) -shell-escape -recorder -interaction=batchmode $(NAME).dtx > /dev/null
+
+$(GENERATED): $(NAME).dtx
+	tex -interaction=batchmode $(NAME).dtx
+
+$(NAME).pdf: $(NAME).dtx $(NAME).cls
+	$(LATEX) $(LATEXFLAGS) $(NAME).dtx
 	$(BIB) $(NAME).bcf > /dev/null
 	if [ -f $(NAME).glo ]; then makeindex -q -s gglo.ist -o $(NAME).gls $(NAME).glo; fi
-	if [ -f $(NAME).idx ]; then makeindex -q -s gind.ist -o $(NAME).ind $(NAME).idx; fi
-	$(LATEX) --recorder --interaction=nonstopmode $(NAME).dtx > /dev/null
-	$(LATEX) --recorder --interaction=nonstopmode $(NAME).dtx > /dev/null
+	$(LATEX) $(LATEXFLAGS) $(NAME).dtx
+	$(LATEX) $(LATEXFLAGS) $(NAME).dtx
 .PHONY:	$(CLEXT) clean distclean inst install zip
 .SILENT:$(CLEXT)
 $(CLEXT):
@@ -27,24 +34,27 @@ $(CLEXT):
 clean:  $(CLEXT)
 	$(MAKE) -C examples clean
 distclean: clean
-	$(RM) $(NAME).{pdf,cls}
 	$(MAKE) -C examples distclean
+	$(RM) $(GENERATED) $(NAME).pdf
+define install_tree
+	$(2) mkdir -p $(1)/tex/latex/$(NAME)
+	$(2) cp $(NAME).cls $(NAME).def $(1)/tex/latex/$(NAME)/
+	$(2) mkdir -p $(1)/source/latex/$(NAME)
+	$(2) cp $(NAME).dtx $(NAME).ins $(1)/source/latex/$(NAME)/
+	$(2) mkdir -p $(1)/doc/latex/$(NAME)
+	$(2) cp $(NAME).pdf $(addprefix $(EGDIR)/$(EGFN)., tex bib pdf) $(1)/doc/latex/$(NAME)/
+endef
+
 inst: all
-	mkdir -p $(UTREE)/{tex,source,doc}/latex/$(NAME)
-	cp $(NAME).{dtx,cls,pdf} $(UTREE)/source/latex/$(NAME)
-	cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(LOCAL)/doc/latex/
+	$(call install_tree,$(UTREE),)
+
 install: all
-	sudo mkdir -p $(LOCAL)/{tex,source,doc}/latex/$(NAME)
-	sudo cp $(NAME).{dtx,cls,pdf} $(LOCAL)/source/latex/$(NAME)
-	sudo cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(LOCAL)/doc/latex/$(EGFN).tex
+	$(call install_tree,$(LOCAL),sudo)
+
 zip: all
-	mkdir -p $(TEMP)/{tex,source,doc}/xelatex/$(NAME)
-	cp $(NAME).cls $(TEMP)/tex/xelatex/$(NAME)/
-	cp $(NAME).dtx $(TEMP)/source/xelatex/$(NAME)/
-	cp $(NAME).pdf $(TEMP)/doc/xelatex/$(NAME)/
-	cp $(EGDIR)/$(EGFN).{tex,bib,pdf} $(TEMP)/doc/xelatex/$(NAME)/
+	$(call install_tree,$(TEMP),)
 	cd $(TEMP); zip -Drq $(TEMP)/$(NAME).tds.zip tex source doc
 	mkdir -p $(TDIR)
-	cp $(NAME).{pdf,dtx} README.md $(TDIR)
+	cp $(addprefix $(NAME)., dtx ins cls def pdf) README.md $(TDIR)/
 	cd $(TEMP); zip -Drq $(PWD)/$(NAME)-$(VERS).zip $(NAME) $(NAME).tds.zip
 	$(RM) -r $(TEMP)

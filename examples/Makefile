@@ -1,21 +1,30 @@
-PACKAGE = mynsfc
-NAME	= my-proposal
-BIBTEX	= biber
-LATEX	= xelatex
-CLEXT   = aux bbl bcf blg fls log out run.xml toc
-all:	$(NAME).pdf clean
-$(NAME).pdf: $(NAME).tex $(NAME).bib ../$(PACKAGE).cls ../$(PACKAGE).def
-	test -L $(PACKAGE).cls || ln -s ../$(PACKAGE).cls .
-	test -L $(PACKAGE).def || ln -s ../$(PACKAGE).def .
-	$(LATEX) -shell-escape -recorder -interaction=batchmode $(NAME).tex > /dev/null
-	$(BIBTEX) $(NAME).bcf >/dev/null
-	$(LATEX) -recorder -interaction=nonstopmode $(NAME).tex > /dev/null
-	$(LATEX) -recorder -interaction=nonstopmode $(NAME).tex > /dev/null
+NAME	?= mynsfc
+EGFN	?= my-proposal
+BIB		?= biber
+LATEX	?= xelatex
+LATEXFLAGS ?= -shell-escape -recorder -interaction=batchmode
+CLEXT   ?= aux bbl bcf blg fls log out run.xml toc
+LINKS   = $(NAME).cls $(NAME).def
+
+all:	$(EGFN).pdf clean
+
+$(LINKS): %: ../%
+	ln -sf $< $@
+
+$(EGFN).pdf: $(EGFN).tex $(EGFN).bib $(LINKS)
+	$(LATEX) $(LATEXFLAGS) $(EGFN).tex
+	$(BIB) $(EGFN).bcf >/dev/null
+	$(LATEX) $(LATEXFLAGS) $(EGFN).tex
+	$(LATEX) $(LATEXFLAGS) $(EGFN).tex
+
 .PHONY:	clean distclean $(CLEXT)
 .SILENT: $(CLEXT)
+
 $(CLEXT):
-	$(RM) $(NAME).$@
+	$(RM) $(EGFN).$@
+
 clean: $(CLEXT)
+
 distclean:	clean
-	$(RM) $(NAME).{pdf,bib,tex}
-	$(RM) $(PACKAGE).{cls,def}
+	$(RM) $(EGFN).pdf $(EGFN).bib $(EGFN).tex
+	$(RM) $(LINKS)
