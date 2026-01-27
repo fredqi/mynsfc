@@ -65,38 +65,72 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %
 % \iffalse
 %<*definitions>
-\ProvidesFile{mynsfc.def}
+\ProvidesFile{mynsfc.def}[2026/01/25 2.00 NSFC definitions]
+\makeatletter
 %% Customizable strings for mynsfc class
-\providecommand{\mynsfctitle}{报告正文（2026版）}
-\providecommand{\mynsfcsubtitle}{参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。\textbf{\color{red}申请书正文原则上不超过30页，鼓励简洁表达。}\cemph{请勿删除或改动下述提纲标题及括号中的文字。}}
+\providecommand{\mynsfc@title}{报告正文（2026版）}
+\providecommand{\mynsfc@subtitle}{参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。\textbf{\color{red}申请书正文原则上不超过30页，鼓励简洁表达。}\cemph{请勿删除或改动下述提纲标题及括号中的文字。}}
 \providecommand{\mynsfcrefname}{参考文献}
 \providecommand{\mynsfccvname}{相关工作}
 \providecommand{\mynsfcpatentcn}{中国发明专利}
+%% Part I
+\providecommand{\mynsfc@part@I@title}{立项依据}
+\providecommand{\mynsfc@part@I@subtitle}{为什么要开展此项研究，研究的科学技术价值如何}
+%% Part II
+\providecommand{\mynsfc@part@II@title}{研究内容}
+\providecommand{\mynsfc@part@II@subtitle}{提纲不做限制，请按照研究工作的自身逻辑撰写。应提炼出特色与创新点、年度研究计划}
+%% Part III
+\providecommand{\mynsfc@part@III@title}{研究基础}
+\providecommand{\mynsfc@part@III@subtitle}{}
+%% Section III-I ...
+\providecommand{\mynsfc@section@III@I@title}{研究基础与可行性分析\textmd{（与本项目相关的研究工作积累和已取得的研究工作成绩，研究风险的应对措施等）；}}
+\providecommand{\mynsfc@section@III@II@title}{工作条件\textmd{（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实情况）；}}
+\providecommand{\mynsfc@section@III@III@title}{正在承担的与本项目相关的科研项目情况\textmd{（申请人和主要参与者正在承担的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、起止年月、与本项目的关系及负责的内容等）；}}
+\providecommand{\mynsfc@section@III@IV@title}{完成国家自然科学基金项目情况\textmd{（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。}}
+%% Part IV
+\providecommand{\mynsfc@part@IV@title}{其他需要说明的情况}
+\providecommand{\mynsfc@part@IV@subtitle}{}
+%% Section IV-I ...
+\providecommand{\mynsfc@section@IV@I@title}{\textmd{申请人同年申请不同类型的国家自然科学基金项目情况（列明同年申请的其他项目的项目类型、项目名称信息，并说明与本项目之间的区别与联系；已收到自然科学基金委不予受理或不予资助决定的，无需列出）。}}
+\providecommand{\mynsfc@section@IV@II@title}{\textmd{具有高级专业技术职务（职称）的申请人或者主要参与者是否存在同年申请或者参与申请国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，申请或参与申请的其他项目的项目类型、项目名称、单位名称、上述人员在该项目中是申请人还是参与者，并说明单位不一致原因。}}
+\providecommand{\mynsfc@section@IV@III@title}{\textmd{具有高级专业技术职务（职称）的申请人或者主要参与者是否存在与正在承担的国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，正在承担项目的批准号、项目类型、项目名称、单位名称、起止年月，并说明单位不一致原因。}}
+\providecommand{\mynsfc@section@IV@IV@title}{\textmd{申请人和主要参与者同年以不同专业技术职务（职称）申请或参与申请科学基金项目的情况（应详细说明原因）。}}
+\providecommand{\mynsfc@section@IV@V@title}{\textmd{其他。}}
 %</definitions>
 %<*driver>
-\ProvidesFile{mynsfc.dtx}
+\ProvidesFile{mynsfc.dtx}[2026/01/25 2.00 A CTeX-based class for writing NSFC proposals.]
 %</driver>
 %<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
-%<class>\ProvidesClass{mynsfc}
+%<class>\ProvidesClass{mynsfc}[2026/01/25 2.00 A CTeX-based class for writing NSFC proposals.]
 %<*class>
-    [2026/01/25 v2.00 A CTeX-based class for writing NSFC proposals.]
 %</class>
 %<*driver>
-\documentclass{mynsfc}
+\documentclass[fontset=fandol]{mynsfc}
 \usepackage{doc}
+\usepackage{metalogo}
+\providecommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 \renewcommand{\generalname}{要点}
 \makeatletter
 \def\glossary@prologue{\section{修改记录}}%
 \def\index@prologue{\section{索引}}%
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\kaishu\bfseries\zihao{-2}\@title\par}
+    \vspace{0.5em}
+    {\kaishu\zihao{-4}\@author\par\@date\par}
+  \end{center}
+  \vspace{1em}
+}
 \makeatother
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
-\bibliography{examples/my-proposal}
+\addbibresource{examples/my-proposal.bib}
 \begin{document}
-  \title{自然科学基金面上项目申请书正文模板}
-  \author{}
-  \date{(2026版)}
+  \title{国家自然科学基金项目申请书正文模板\\%
+    \textmd{\heiti\small （适配2026版面上项目正文模板）}}
+  \author{Fei Qi $\langle$\email{fred.qi@ieee.org}$\rangle$}
+  \date{2026年1月26日}
   \maketitle
   \DocInput{mynsfc.dtx}
 \end{document}
@@ -123,69 +157,71 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \begin{document}
 \maketitle
 
-\part{立项依据}{为什么要开展此项研究，研究的科学技术价值如何}
-\label{part:background}
+%% （一）立项依据: 为什么要开展此项研究，研究的科学技术价值如何
+\nsfcpart\label{part:background}
 
-\part{研究内容}{提纲不做限制，请按照研究工作的自身逻辑撰写。应提炼出特色与创新点、年度研究计划}
-\label{part:research-content}
+\section{研究背景与意义}
 
-\part{研究基础}{}
-\label{part:foundations}
+\section{国内外研究现状}
 
-\section{\textbf{研究基础与可行性分析}（与本项目相关的研究工作积累和已取得的研究工作成绩，研究风险的应对措施等）；}
-\label{sec:foundatioins}
+%% （二）研究内容:提纲不做限制，请按照研究工作的自身逻辑撰写。应提炼出特色与创新点、年度研究计划
+\nsfcpart\label{part:research-content}
 
-\newrefsegment
-  
-  申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。
+\section{拟解决的关键科学问题}
 
-  在使用\texttt{biblatex} 3.4以上版本的情况下，建议使用
-  \texttt{biblatex}提供数据标注功能。如第二个作者是自己，用粗体标记自己的姓
-  名；且为文章的通记作者，加上角标``*''进行标注。则仅需要在bibtex文
-  件的相应条目中增加以下标记：
-\begin{verbatim}
-  author = "Xia, C and Qi, F and Shi, G and Wang, P",
-  author+an = {2=self;2:family=corr},
-\end{verbatim}
-  
-\printbibliography[segment=\therefsegment,heading=cvtype,title={相关工作}]
-  
-\section{\textbf{工作条件}（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实情况）；}
-\label{sec:condition}
+\section{拟采用的研究方法与技术路线}
 
-略。
+\subsection{方法与技术}
 
-\section{\textbf{正在承担的与本项目相关的科研项目情况}（申请人和主要参与者正在承担的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、起止年月、与本项目的关系及负责的内容等）；}
-\label{sec:projects}
+\subsubsection{技术路线图}
 
-略。
+\section{特色与创新点}
 
-\section{\textbf{完成国家自然科学基金项目情况}（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。}
-\label{sec:finished-project}
+\section{年度研究计划}
 
-\newrefsegment
+\section*{参考文献}
 
-略。
+%% （三）研究基础:
+\nsfcpart\label{part:foundations}
 
-\part{其他需要说明的情况}{}
-\label{cha:others}
+% 研究基础与可行性分析（与本项目相关的研究工作积累和已取得的研究工作成绩，研究风险的应对措施等）；
+\nsfcsection\label{sec:foundatioins}
 
-\section{申请人同年申请不同类型的国家自然科学基金项目情况（列明同年申请的其他项目的项目类型、项目名称信息，并说明与本项目之间的区别与联系；已收到自然科学基金委不予受理或不予资助决定的，无需列出）。}
+%% 工作条件（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实情况）；}
+\nsfcsection\label{sec:condition}
+
+%% 正在承担的与本项目相关的科研项目情况（申请人和主要参与者正在承担的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、起止年月、与本项目的关系及负责的内容等）；
+\nsfcsection\label{sec:projects}
+
+
+%% 完成国家自然科学基金项目情况（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。}
+\nsfcsection\label{sec:acomplished-project}
+
+%% （四）其他需要说明的情况：
+\nsfcpart\label{cha:others}
+
+%% 申请人同年申请不同类型的国家自然科学基金项目情况（列明同年申请的其他项目的项目类型、项目名称信息，并说明与本项目之间的区别与联系；已收到自然科学基金委不予受理或不予资助决定的，无需列出）。
+\nsfcsection
 
 无
 
-\section{具有高级专业技术职务（职称）的申请人或者主要参与者是否存在同年申请或者参与申请国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，申请或参与申请的其他项目的项目类型、项目名称、单位名称、上述人员在该项目中是申请人还是参与者，并说明单位不一致原因。}
+%% 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在同年申请或者参与申请国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，申请或参与申请的其他项目的项目类型、项目名称、单位名称、上述人员在该项目中是申请人还是参与者，并说明单位不一致原因。
+\nsfcsection
 
 无
 
-\section{具有高级专业技术职务（职称）的申请人或者主要参与者是否存在与正在承担的国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，正在承担项目的批准号、项目类型、项目名称、单位名称、起止年月，并说明单位不一致原因。}
-无
-
-\section{申请人和主要参与者同年以不同专业技术职务（职称）申请或参与申请科学基金项目的情况（应详细说明原因）。}
+%% 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在与正在承担的国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，正在承担项目的批准号、项目类型、项目名称、单位名称、起止年月，并说明单位不一致原因。
+\nsfcsection
 
 无
 
-\section{其他。}
+%% 申请人和主要参与者同年以不同专业技术职务（职称）申请或参与申请科学基金项目的情况（应详细说明原因）。
+\nsfcsection
+
+无
+
+%% 其他。
+\nsfcsection
 
 无
 \end{document}
@@ -221,6 +257,40 @@ Author:  Fei Qi <fred.qi@ieee.org>
 % 
 % \StopEventually{\PrintChanges}
 %
+% \begin{abstract}
+% \iffalse
+% 自2015年起，自然科学基金委网站允许以PDF格式上传申请书正文，为使用\LaTeX{}撰写基金申请书提供了现实路径。
+% 由于大量科研人员已熟悉\LaTeX{}工作流，使用\LaTeX{}可以便捷地排版公式、统一管理参考文献，并自动完成图表编号与交叉引用，熟练使用者写作效率较高。
+% 针对申请书中“第一作者/通讯作者标注”的常见需求，本模板基于\texttt{biblatex} v3.4及以上版本的标注机制实现了更易用的作者高亮与通讯作者标记，并借助过滤器与分段参考文献支持，实现按类别列举成果。
+% 2026年自然基金申请书模板提纲更新后，本模板同步进行了适配与调整。
+% 作者曾使用本模板申报并先后获批两项面上项目，未出现因格式问题导致的形式审查风险。
+% 同时提供“魔术指令”\texttt{\textbackslash nsfcpart} 与 \texttt{\textbackslash nsfcsection}，用于按默认提纲自动生成各部分与小节标题，减少手工拷贝与误改。
+% 使用提示：推荐按\texttt{xelatex + biber}工作流编译；如基金委格式要求更新，请以当年指南与模板为准。）
+% \fi
+%   本宏包旨在为国家自然科学基金申请书提供一套非官方的 \LaTeX{} 正文写作模板。
+%   鉴于基金委自2015年起允许提交PDF格式正文，本模板充分发挥了 \LaTeX{} 在公式排版、参考文献管理及交叉引用等方面的优势，显著提升写作效率。
+%   针对2026年面上项目最新提纲，模板提供了 \texttt{\textbackslash nsfcpart} 与 \texttt{\textbackslash nsfcsection} 指令以自动生成标准章节标题，避免手动维护的繁琐与格式风险；
+%   同时利用 \texttt{biblatex} 实现了便捷的作者高亮与成果分类列举功能。
+%   经作者实战验证，使用本模板历史版本撰写的申请书已先后获批两项面上项目，未出现形式审查问题。
+%   （注：本模板需使用 \XeLaTeX{}/\LuaLaTeX{} + \texttt{biber} 编译。）
+% \end{abstract}
+% 
+% \section{介绍}
+%
+% \newrefsegment
+%  
+% 申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。
+%  
+% 在使用\texttt{biblatex} 3.4以上版本的情况下，建议使用
+%  \texttt{biblatex}提供数据标注功能。如第二个作者是自己，用粗体标记自己的姓
+%  名；且为文章的通记作者，加上角标``*''进行标注。则仅需要在bibtex文
+%  件的相应条目中增加以下标记：
+% \begin{verbatim}
+%   author = "Xia, C and Qi, F and Shi, G and Wang, P",
+%   author+an = {2=self;2:family=corr},
+% \end{verbatim}
+%   
+% \printbibliography[segment=\therefsegment,heading=cvtype,title={相关工作}]
 % \section{实现}
 %
 %<*class>
@@ -232,6 +302,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 % \changes{1.01}{2016/09/05}{使用\texttt{kvoptions}处理宏包选项}
 %    \begin{macrocode}
 \RequirePackage{kvoptions}
+\RequirePackage{etoolbox}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\toccolor}
@@ -240,26 +311,35 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \DeclareStringOption[0070c0]{toccolor}
 %    \end{macrocode}
 % \end{macro}
+% \begin{macro}{fontset}
+% \changes{2.00}{2026/01/27}{增加\texttt{fontset}选项支持字体配置}
+%    \begin{macrocode}
+\DeclareStringOption[none]{fontset}
+%    \end{macrocode}
+% \end{macro}
 %   \begin{macrocode}
 \ProcessKeyvalOptions*
 %% Load customizable strings
 \input{mynsfc.def}
-%% Load default class
-\LoadClass[a4paper,UTF8,fontset=none,zihao=-4]{ctexart}
-% \setmainfont{Times New Roman}
-%% Setup Windows Chinese fonts
-\setCJKmainfont{SimSun}[AutoFakeBold=2.5]
-\setCJKsansfont{SimHei}[AutoFakeBold=2.5]
-\setCJKmonofont{FangSong}
-\setCJKfamilyfont{zhsong}{SimSun}[AutoFakeBold=2.5]
-\setCJKfamilyfont{zhkai}{KaiTi}[AutoFakeBold=2.5]
-\setCJKfamilyfont{zhhei}{SimHei}[AutoFakeBold=2.5]
-\setCJKfamilyfont{zhfs}{FangSong}
-%% Map CTeX font commands to families
-\newcommand*{\songti}{\CJKfamily{zhsong}}
-\newcommand*{\heiti}{\CJKfamily{zhhei}}
-\newcommand*{\fangsong}{\CJKfamily{zhfs}}
-\newcommand*{\kaishu}{\CJKfamily{zhkai}}
+%% Load ctexart class
+\ifdefstring{\mynsfc@fontset}{none}{%
+  \LoadClass[a4paper,UTF8,fontset=none,zihao=-4]{ctexart}
+  %% Setup Windows Chinese fonts
+  \setCJKmainfont{SimSun}[AutoFakeBold=2.5]
+  \setCJKsansfont{SimHei}[AutoFakeBold=2.5]
+  % \setCJKmonofont{FangSong}
+  \setCJKfamilyfont{zhsong}{SimSun}[AutoFakeBold=2.5]
+  \setCJKfamilyfont{zhkai}{KaiTi}[AutoFakeBold=2.5]
+  \setCJKfamilyfont{zhhei}{SimHei}[AutoFakeBold=2.5]
+  % \setCJKfamilyfont{zhfs}{FangSong}
+  %% Map CTeX font commands to families
+  \newcommand*{\songti}{\CJKfamily{zhsong}}
+  \newcommand*{\heiti}{\CJKfamily{zhhei}}
+  \newcommand*{\fangsong}{\CJKfamily{zhfs}}
+  \newcommand*{\kaishu}{\CJKfamily{zhkai}}
+}{%
+  \LoadClass[a4paper,UTF8,fontset=fandol,zihao=-4]{ctexart}
+}
 \RequirePackage[hmargin=1.18in,vmargin=0.98in]{geometry}
 \setlength{\parskip}{0pt \@plus2pt \@minus0pt}
 %    \end{macrocode}
@@ -289,8 +369,8 @@ Author:  Fei Qi <fred.qi@ieee.org>
 
 \setlength{\bibitemsep}{2pt}
 \appto{\bibfont}{\normalfont\zihao{5}\linespread{1}\selectfont}
-\defbibheading{reftype}[\mynsfcrefname]{\subsection*{#1}}
-\defbibheading{cvtype}[\mynsfccvname]{\subsubsection*{#1}}
+\defbibheading{reftype}[\mynsfcrefname]{\section*{#1}}
+\defbibheading{cvtype}[\mynsfccvname]{\subsection*{#1}}
 \defbibfilter{conference}{type=inproceedings or type=incollection}
 %    \end{macrocode}
 % \begin{macro}{patentcn}
@@ -331,15 +411,16 @@ Author:  Fei Qi <fred.qi@ieee.org>
   \let\@oddfoot\@empty%
   \let\@evenfoot\@empty}
 %    \end{macrocode}
+%
 % \begin{macro}{\maketitle}
 % \changes{1.01}{2016/07/11}{改进 \texttt{maketitle} 命令}
 %    \begin{macrocode}
 \renewcommand{\maketitle}{%
   \begin{center}%
-    \kaishu\zihao{3}\bfseries\mynsfctitle%
+    \kaishu\zihao{3}\bfseries\mynsfc@title%
   \end{center}%
   \vspace{1ex}%
-  {\kaishu\zihao{4}\noindent\hspace{2\ccwd}\mynsfcsubtitle}\par%
+  {\kaishu\zihao{4}\noindent\hspace{2\ccwd}\mynsfc@subtitle}\par%
   \vspace{2ex}}
 %    \end{macrocode}
 % \end{macro}
@@ -360,19 +441,25 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \let\oldpart\part
 \renewcommand{\part}[2]{%
   \oldpart{#1：}%
-  \ifx&#2&\else%
-    {\tocformat\zihao{-3}\noindent\hspace{2\ccwd}（#2）}\par%
-  \fi}
+  \begingroup
+    \protected@edef\mynsfc@tempa{#2}%
+    \ifx\mynsfc@tempa\@empty
+      \endgroup
+    \else
+      \endgroup
+      {\tocformat\zihao{-3}\noindent\hspace{2\ccwd}（#2）}\par%
+    \fi}
 %    \end{macrocode}
 % \end{macro}
+% 
 % \begin{macro}{\subsubsection, \subsection, \section}
 % \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置格式}
 %    \begin{macrocode}
-\newcommand{\mynsfc@secnumber}{%
-  \ifnum\value{part}<4\relax\bfseries\fi\thesection}
+\newcommand{\mynsfc@secformat}{%
+  \tocformat\ifnum\value{part}<4\relax\bfseries\fi\zihao{4}}
 \ctexset{
-  section/format       = \tocformat\zihao{4},
-  section/number       = \mynsfc@secnumber,
+  section/format       = \mynsfc@secformat,
+  section/number       = \arabic{section},
   section/aftername    = {.\hspace{1ex}},
   section/beforeskip   = 1ex,
   section/afterskip    = 0.5ex,
@@ -386,17 +473,42 @@ Author:  Fei Qi <fred.qi@ieee.org>
   subsection/aftername    = {.\hspace{0.25em}},
   subsection/beforeskip   = 2ex,
   subsection/afterskip    = 1ex,
-  subsection/indent       = 0em,
+  subsection/indent       = 0pt,
 }
 \ctexset{
-  subsubsection/format       = \tocformat\bfseries\zihao{-4},
+  subsubsection/name         = {(,)},
+  subsubsection/aftername    = {\hskip1ex},
   subsubsection/number       = \arabic{subsubsection},
-  subsubsection/aftername    = {\hspace{0.25em}},
+  subsubsection/format       = \kaishu\bfseries\zihao{-4},
   subsubsection/beforeskip   = 2ex,
   subsubsection/afterskip    = 1ex,
-  subsubsection/indent       = 0ex,
+  subsubsection/indent       = 0pt,
 }
 \captionsetup{font=small}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nsfcpart}
+% \changes{2.00}{2026/01/25}{新增魔术命令}
+%    \begin{macrocode}
+\newcommand{\nsfcpart}{%
+  \edef\mynsfc@nextpart{\number\numexpr\value{part}+1\relax}%
+  \edef\mynsfc@romannum{\@Roman\mynsfc@nextpart}%
+  \part{\csname mynsfc@part@\mynsfc@romannum @title\endcsname}%
+       {\csname mynsfc@part@\mynsfc@romannum @subtitle\endcsname}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nsfcsection}
+% \changes{2.00}{2026/01/25}{新增魔术命令}
+%    \begin{macrocode}
+\newcommand{\nsfcsection}{%
+  \edef\mynsfc@partroman{\@Roman\c@part}%
+  \edef\mynsfc@nextsec{\number\numexpr\value{section}+1\relax}%
+  \edef\mynsfc@secroman{\@Roman\mynsfc@nextsec}%
+  \section{\csname mynsfc@section@\mynsfc@partroman @\mynsfc@secroman @title\endcsname}%
+}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -405,7 +517,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \newcommand{\cemph}[1]{\textbf{\color[HTML]{\mynsfc@toccolor}#1}}
 %    \end{macrocode}
 % \end{macro}
-% 
+%
 %    \begin{macrocode}
 \AtBeginDocument{\ps@mynsfc@empty}
 \endinput
