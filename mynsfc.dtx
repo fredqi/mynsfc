@@ -13,7 +13,7 @@
 
 This is a generated file.
 
-Copyright (C) 2015-2026 by Fei Qi <fred.qi@ieee.org>
+Copyright (C) 2015-2026 by Fei Qi <fred.qi@gmail.com>
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License, either
@@ -29,8 +29,9 @@ This work consists of the file mynsfc.dtx and the derived files
 mynsfc.cls, mynsfc.def, and the example files.
 
 ----------------------------------------------------------------
-mynsfc --- A CTeX-based template for writing the main body of NSFC proposals.
-Author:  Fei Qi <fred.qi@ieee.org>
+mynsfc --- A CTeX-based template for writing the main text of NSFC
+    proposals, aligned with the 2026 General Program specification.
+Author: Fei Qi <fred.qi@gmail.com>
 ----------------------------------------------------------------
 
 \endpreamble
@@ -108,6 +109,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \documentclass[a4paper,fontset=fandol,zihao=-4]{ctexart}
 \usepackage{doc}
 \usepackage{metalogo}
+\usepackage{paralist}
 \usepackage[vmargin=1in,lmargin=1.5in,rmargin=0.75in]{geometry}
 \providecommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 \usepackage{biblatex}
@@ -130,7 +132,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \RecordChanges
 \begin{document}
   \title{国家自然科学基金项目申请书正文模板\\%
-    \textmd{\heiti\small （适配2026版面上项目正文模板）}}
+    \textmd{\heiti\small （\texttt{2.0}版：适配2026版面上项目正文模板）}}
   \author{Fei Qi $\langle$\email{fred.qi@gmail.com}$\rangle$}
   \date{2026年1月26日}
   \maketitle
@@ -150,74 +152,126 @@ Author:  Fei Qi <fred.qi@ieee.org>
 % \changes{1.21}{2018/08/22}{使用 XeLaTeX 的 FakeBold 特性}
 % \changes{1.22}{2019/04/07}{增强\texttt{biblatex}参考文献格式}
 % \changes{1.30}{2021/08/18}{基于最新获资助的项目申请书发布}
-% \changes{2.00}{2026/01/25}{\textbf{适配2026版面上项目正文模板}}
+% \changes{2.00}{2026/01/28}{\textbf{适配2026版面上项目正文模板}}
+% \changes{2.00}{2026/01/28}{更新示例文件以展示新功能}
 %
 % \iffalse
 %<*example>
 \documentclass{mynsfc}
+\usepackage{booktabs}
 \addbibresource{my-proposal.bib}
 \begin{document}
 \maketitle
-
 %% （一）立项依据: 为什么要开展此项研究，研究的科学技术价值如何
 \nsfcpart\label{part:background}
-
 \section{研究背景与意义}
+第（一）、（二）两部分的节标题及内容仅为测试模板功能正确与否而提供，不是项
+目申请书的推荐提纲与写作指南。
 
 \section{国内外研究现状}
 
-%% （二）研究内容:提纲不做限制，请按照研究工作的自身逻辑撰写。应提炼出特色与创新点、年度研究计划
+略
+
+%% （二）研究内容:提纲不做限制，请按照研究工作的自身逻辑撰写。应提炼出
+%% 特色与创新点、年度研究计划
 \nsfcpart\label{part:research-content}
-
-\section{拟解决的关键科学问题}
-
-\section{拟采用的研究方法与技术路线}
-
-\subsection{方法与技术}
-
-\subsubsection{技术路线图}
 
 \section{特色与创新点}
 
-\section{年度研究计划}
+\subsection{研究特色}
 
+测试表格与插图。
+
+\begin{table}[h]
+  \centering
+  \caption{表格标题}
+  \label{tab:example}
+  \begin{tabular}{ccc}
+    \toprule
+    表头 & 表头 & 表头\\
+    \midrule
+    内容 & 内容 & 内容 \\
+    \bottomrule                  
+  \end{tabular}
+\end{table}
+
+\begin{figure}[h]
+  \centering  
+  \caption{插图测试}
+  \label{fig:example}
+\end{figure}
+
+\subsection{本项目的创新之处}
+\subsubsection{创新点I}
+略
+
+\subsubsection{创新点II}
+略
+
+\subsubsection{创新点III}
+略
+
+\section{年度研究计划}
 \section*{参考文献}
 
 %% （三）研究基础:
 \nsfcpart\label{part:foundations}
 
-% 研究基础与可行性分析（与本项目相关的研究工作积累和已取得的研究工作成绩，研究风险的应对措施等）；
+% 研究基础与可行性分析（与本项目相关的研究工作积累和已取得的研究工作成
+% 绩，研究风险的应对措施等）；
 \nsfcsection\label{sec:foundatioins}
+\newrefsegment
 
-%% 工作条件（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实情况）；}
+发表论文\cite{mypaper_2025}在XX领域具有重要影响。
+
+\printbibliography[heading=cvtype]{}
+
+%% 工作条件（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括
+%% 利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实
+%% 情况）；}
 \nsfcsection\label{sec:condition}
 
-%% 正在承担的与本项目相关的科研项目情况（申请人和主要参与者正在承担的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、起止年月、与本项目的关系及负责的内容等）；
+%% 正在承担的与本项目相关的科研项目情况（申请人和主要参与者正在承担的与
+%% 本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计
+%% 划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、
+%% 起止年月、与本项目的关系及负责的内容等）；
 \nsfcsection\label{sec:projects}
 
 
-%% 完成国家自然科学基金项目情况（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。
+%% 完成国家自然科学基金项目情况（对申请人负责的前一个已资助期满的科学基
+%% 金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系
+%% 加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细
+%% 目录）。
 \nsfcsection\label{sec:acomplished-project}
 
 %% （四）其他需要说明的情况：
 \nsfcpart\label{cha:others}
 
-%% 申请人同年申请不同类型的国家自然科学基金项目情况（列明同年申请的其他项目的项目类型、项目名称信息，并说明与本项目之间的区别与联系；已收到自然科学基金委不予受理或不予资助决定的，无需列出）。
+%% 申请人同年申请不同类型的国家自然科学基金项目情况（列明同年申请的其他
+%% 项目的项目类型、项目名称信息，并说明与本项目之间的区别与联系；已收到
+%% 自然科学基金委不予受理或不予资助决定的，无需列出）。
 \nsfcsection
 
 无
 
-%% 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在同年申请或者参与申请国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，申请或参与申请的其他项目的项目类型、项目名称、单位名称、上述人员在该项目中是申请人还是参与者，并说明单位不一致原因。
+%% 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在同年申请或
+%% 者参与申请国家自然科学基金项目的单位不一致的情况；如存在上述情况，列
+%% 明所涉及人员的姓名，申请或参与申请的其他项目的项目类型、项目名称、单
+%% 位名称、上述人员在该项目中是申请人还是参与者，并说明单位不一致原因。
 \nsfcsection
 
 无
 
-%% 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在与正在承担的国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及人员的姓名，正在承担项目的批准号、项目类型、项目名称、单位名称、起止年月，并说明单位不一致原因。
+%% 具有高级专业技术职务（职称）的申请人或者主要参与者是否存在与正在承担
+%% 的国家自然科学基金项目的单位不一致的情况；如存在上述情况，列明所涉及
+%% 人员的姓名，正在承担项目的批准号、项目类型、项目名称、单位名称、起止
+%% 年月，并说明单位不一致原因。
 \nsfcsection
 
 无
 
-%% 申请人和主要参与者同年以不同专业技术职务（职称）申请或参与申请科学基金项目的情况（应详细说明原因）。
+%% 申请人和主要参与者同年以不同专业技术职务（职称）申请或参与申请科学基
+%% 金项目的情况（应详细说明原因）。
 \nsfcsection
 
 无
@@ -229,112 +283,113 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \end{document}
 %</example>
 %<*examplebib>
-@STRING{IEEE_J_PAMI       = "{IEEE} Trans. Pattern Anal. Mach. Intell."}
-
-@article{bengio_representation_2013,
-    title = "Representation Learning: A Review and New Perspectives",
-    author = "Bengio, Y. and Courville, A. and Vincent, P.",
-    volume = "35",
-    number = "8",
-    pages = "1798--1828",
-    journal = IEEE_J_PAMI,
-    year = "2013",
-    doi = "10.1109/TPAMI.2013.50",
-}
-
-@article{xia_saliency_2015,
-    author = "Xia, Chen and Qi, Fei and Shi, Guangming and Wang, Pengjin",
-    author+an = {2=self;2:family=corr},
-    title = "Nonlocal Center-Surround Reconstruction-based Bottom-Up Saliency Estimation",
-    journal = "{Pattern Recognition}",
-    doi = "10.1016/j.patcog.2014.10.007",
-    month = "4",
-    number = "4",
-    volume = "48",
-    year = "2015",
-    pages = "1337--1348"
+@article{mypaper_2025,
+    title = {Paper Title},
+    author = {San Zhang and Si Li and Wu Wang},
+    author+an = {2=self;2:family=corr;3:family=corr},
+    volume = {1},
+    issue = {1},
+    pages = "10--20",
+    journal = {Journal Name},
+    year = "2025",
 }
 %</examplebib>
 % \fi
 % 
 % \StopEventually{\PrintChanges}
+% \changes{2.00}{2026/01/28}{更新说明文档}
 %
 % \begin{abstract}
-% \iffalse
-% 自2015年起，自然科学基金委网站允许以PDF格式上传申请书正文，为使用\LaTeX{}撰写基金申请书提供了现实路径。
-% 由于大量科研人员已熟悉\LaTeX{}工作流，使用\LaTeX{}可以便捷地排版公式、统一管理参考文献，并自动完成图表编号与交叉引用，熟练使用者写作效率较高。
-% 针对申请书中“第一作者/通讯作者标注”的常见需求，本模板基于\texttt{biblatex} v3.4及以上版本的标注机制实现了更易用的作者高亮与通讯作者标记，并借助过滤器与分段参考文献支持，实现按类别列举成果。
-% 2026年自然基金申请书模板提纲更新后，本模板同步进行了适配与调整。
-% 作者曾使用本模板申报并先后获批两项面上项目，未出现因格式问题导致的形式审查风险。
-% 同时提供“魔术指令”\texttt{\textbackslash nsfcpart} 与 \texttt{\textbackslash nsfcsection}，用于按默认提纲自动生成各部分与小节标题，减少手工拷贝与误改。
-% 使用提示：推荐按\texttt{xelatex + biber}工作流编译；如基金委格式要求更新，请以当年指南与模板为准。）
-% \fi
-%   本宏包旨在为国家自然科学基金申请书提供一套非官方的 \LaTeX{} 正文写作模板。
-%   鉴于基金委自2015年起允许提交PDF格式正文，本模板充分发挥了 \LaTeX{} 在公式排版、参考文献管理及交叉引用等方面的优势，显著提升写作效率。
-%   针对2026年面上项目最新提纲，模板提供了 \texttt{\textbackslash nsfcpart} 与 \texttt{\textbackslash nsfcsection} 指令以自动生成标准章节标题，避免手动维护的繁琐与格式风险；
-%   同时利用 \texttt{biblatex} 实现了便捷的作者高亮与成果分类列举功能。
-%   经作者实战验证，使用本模板历史版本撰写的申请书已先后获批两项面上项目，未出现形式审查问题。
-%   （注：本模板需使用 \XeLaTeX{}/\LuaLaTeX{} + \texttt{biber} 编译。）
+%   本宏包旨在为国家自然科学基金申请书提供一套非官方的 \LaTeX{} 正文写
+%   作模板。鉴于基金委自2015年起允许提交PDF格式正文，本模板充分发挥
+%   了 \LaTeX{} 在公式排版、参考文献管理及交叉引用等方面的优势，显著提
+%   升写作效率。针对2026年面上项目最新提纲，模板提供
+%   了 \texttt{\textbackslash nsfcpart} 与 \texttt{\textbackslash
+%   nsfcsection} 指令以自动生成标准章节标题，避免手动维护的繁琐与格式风
+%   险； 同时利用 \texttt{biblatex} 实现了便捷的作者高亮与成果分类列举
+%   功能。经作者实战验证，使用本模板历史版本撰写的申请书已先后获批两项
+%   面上项目，未出现形式审查问题。
+%
+%   （本模板推荐使用 \XeLaTeX{}/\LuaLaTeX{} + \texttt{biber} 编译；如基
+%   金委格式要求更新，请以当年指南与模板为准。）
 % \end{abstract}
 % 
 % \section{快速上手}
-% 本宏包旨在为国家自然科学基金申请书提供符合官方格式要求的 \LaTeX{} 模板。
-% 最简使用示例见文件\texttt{examples/my-proposal.tex}。
+% 本宏包旨在为国家自然科学基金申请书提供符合官方格式要求的 \LaTeX{} 模
+% 板。使用示例见文件\texttt{examples/my-proposal.tex}。建议使
+% 用 \XeLaTeX{}/\LuaLaTeX{} 引擎配合 \texttt{biber} 进行编译，以确保中
+% 文字体与参考文献正确处理。字体问题及一般编译设置问题请参
+% 考\texttt{ctex}说明文档。\texttt{biber}/\texttt{biblatex}的使用参考相
+% 关文档。
 %
-% 编译说明：请使用 \XeLaTeX{} 引擎配合 \texttt{biber} 进行编译，以确保中文字体与参考文献正确处理。
-%
-% \subsection{标准提纲生成}
-% 为严格遵循基金委当年的申请书提纲要求，防止手动输入导致的文字错漏，本模板提供了“魔术命令”以自动生成标准标题：
-% \begin{itemize}
-%   \item \texttt{\textbackslash nsfcpart}：根据文档当前所在的“部分”编号（如第一部分、第二部分），自动调取并生成对应的中文数字标题及括号内的说明文字。
-%   \item \texttt{\textbackslash nsfcsection}：根据当前“部分”及“小节”编号，自动生成对应的带序号标题及说明文字（如“1. 立项依据...”）。
-% \end{itemize}
-% 推荐申请人始终使用这两个命令构建文档骨架。
+% \subsection{2026版面项目提纲生成}
+% 为严格遵循基金委当年的申请书提纲要求，防止手动输入导致的文字错漏，本
+% 模板提供了“魔术命令”以自动生成标准标题：
+% \begin{compactitem}
+% \item \texttt{\textbackslash nsfcpart}：根据文档当前所在的“部分”编号
+%   （如第一部分、第二部分），自动调取并生成对应的中文数字标题及括号内
+%   的说明文字。即第一个\texttt{\textbackslash nsfcpart}命令生成“（一）
+%   立项依据：”，第二个\texttt{\textbackslash nsfcpart}命令生成“（二）
+%   研究内容：”。
+%   \item \texttt{\textbackslash nsfcsection}：根据当前“部分”及“小节”编
+%     号，自动生成对应的带序号标题及说明文字（如“1. 立项依据...”）。因
+%     前两部分无指定标题，请使用\LaTeX{}的通用节标题命令
+%     如\texttt{\textbackslash section}。
+% \end{compactitem}
+% 推荐面上项目申请人使用这两个命令构建文档骨架。
 % 
 % \subsection{自定义章节}
 % 如需在标准提纲之外增加章节，或调整特定标题格式，可使用标准命令：
-% \begin{itemize}
-%   \item \texttt{\textbackslash part\{标题\}\{副标题\}}：接受两个参数。若无需副标题（括号内容），第二个参数请留空。
-%   \item \texttt{\textbackslash section\{标题\}}：生成标准小节标题。
-% \end{itemize}
-%
-% 若需要在标题中混合字体（例如：\textbf{粗体标题} \textmd{宋体说明}），可使用 \texttt{\textbackslash textmd} 命令包裹说明文字：
+% \begin{compactitem}
+% \item \texttt{\textbackslash part\{标题\}\{副标题\}}：接受两个参数。
+%   若无需副标题（括号内容），第二个参数请留空。
+% \item \texttt{\textbackslash section\{标题\}}：生成标准小节标题。若需
+%   要在标题中混合字体，例如：“\textbf{粗体标题}\textmd{（正体说
+%   明）}”， 可使用 \texttt{\textbackslash textmd} 命令包裹说明文字：
 % \begin{verbatim}
-% \section{拟采取的研究方案及可行性分析 \textmd{（包括研究方法、技术路线...）}}
+% \section{研究方案\textmd{（研究方法与技术路线）}}
 % \end{verbatim}
+% \end{compactitem}
 %
-% \subsection{成果录入与标注}
-% 本模板基于 \texttt{biblatex} (v3.4+) 实现参考文献管理与作者标注。
+% \subsection{文献与成果列表及作者标注}
 % 
-% \subsubsection{作者高亮与通讯作者标记}
-% 通过在 \texttt{.bib} 文件条目中添加 \texttt{author+an} 字段，可实现灵活的作者标注：
-% \begin{itemize}
-%   \item \texttt{self}：将作者姓名加粗（用于标注申请人）。
-%   \item \texttt{corr}：标记为通讯作者（在右上角添加星号）。
-% \end{itemize}
+% 本模板基于 \texttt{biblatex} (v3.4+) 实现参考文献管理与作者标注。通过
+% 在 \texttt{.bib} 文件条目中添加 \texttt{author+an} 字段，可实现灵活的
+% 作者标注。字段格式为 \texttt{<作者序号>=<label>} 或 \texttt{<作者序
+% 号>:<part>=<label>}。常用标记如下：
+% \begin{compactitem}
+% \item \texttt{self}：表示对应论文作者为自然基金项目申请人（姓名加粗
+%   ）。
+% \item \texttt{corr}：表示相应论文作者为通讯作者（右上角标注星号）。
+% \end{compactitem}
 % 
-% 语法为 \texttt{作者序号=标注类型}。例如，若申请人为第2作者，且同时为通讯作者：
+% 下例展示了第2、3作者为通讯作者，且第2作者为申请人的情况：
 % \begin{verbatim}
 % @article{mypaper,
-%   author = {San, Zhang and Si, Li and Wu, Wang},
-%   author+an = {2=self;2:family=corr},
+%   author = {San Zhang and Si Li and Wu Wang},
+%   author+an = {2=self;2:family=corr;3:family=corr},
 %   title = {...},
 %   ...
 % }
 % \end{verbatim}
+% 其中 \texttt{2=self} 将第2作者（Si Li）姓名加
+% 粗； \texttt{2:family=corr}与 \texttt{3:family=corr} 分别在第2作者与
+% 第3作者（Wu Wang）的姓氏右上角标记星号。
 %
 % \section{宏包选项}
-% \begin{itemize}
-%   \item \texttt{fontset}：字体配置选项。
-%     \begin{itemize}
-%       \item \texttt{none}（默认）：不加载特定字体集，适合 Windows 用户使用系统自带的 SimSun/SimHei。
-%       \item \texttt{fandol}：加载开源 Fandol 字体集，适合 Linux 环境或 CI 自动构建。
-%     \end{itemize}
-%   \item \texttt{toccolor}：定义标题颜色（默认接近 Word 模板的蓝色）。
-% \end{itemize}
+% \begin{compactitem}
+% \item \texttt{fontset}：字体配置选项。
+%   \begin{compactitem}
+%   \item \texttt{none}（默认）：不加载特定字体集，适合 Windows 用户使
+%     用系统自带的 SimSun/SimHei。
+%   \item \texttt{fandol}：加载开源 Fandol 字体集，适合 Linux 环境
+%     或 CI 自动构建。
+%   \end{compactitem}
+% \item \texttt{toccolor}：定义标题颜色（默认接近 Word 模板的蓝色）。
+% \end{compactitem}
 %
 % \section{宏包实现}
-%
+% \subsection{宏包选项实现}
 %<*class>
 %    \begin{macrocode}
 \ExecuteOptions{}
@@ -347,7 +402,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \RequirePackage{etoolbox}
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\toccolor}
+% \begin{macro}{toccolor}
 % \changes{1.01}{2016/09/05}{增加\texttt{toccolor}选项支持HTML/CSS格式标题颜色设置}
 %    \begin{macrocode}
 \DeclareStringOption[0070c0]{toccolor}
@@ -363,7 +418,11 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \ProcessKeyvalOptions*
 %% Load customizable strings
 \input{mynsfc.def}
-%% Load ctexart class
+%    \end{macrocode}
+%
+% \subsubsection{加载\texttt{ctexart}并设置字体}
+%
+%   \begin{macrocode}
 \ifdefstring{\mynsfc@fontset}{none}{%
   \LoadClass[a4paper,UTF8,fontset=none,zihao=-4]{ctexart}
   %% Setup Windows Chinese fonts
@@ -400,6 +459,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
   pdfpagelabels}
 \urlstyle{same}
 %    \end{macrocode}
+% \subsubsection{加载\texttt{biblatex}宏包并设置作者标注}
 %    \begin{macrocode}
 %% Load and setup package biblatex
 \RequirePackage[backend=biber,
@@ -461,6 +521,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{设置正文标题格式}
 % \begin{macro}{\maketitle}
 % \changes{1.01}{2016/07/11}{改进 \texttt{maketitle} 命令}
 %    \begin{macrocode}
@@ -474,8 +535,10 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %    \end{macrocode}
 % \end{macro}
 %
+% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置部分与节标题格式}
+%
+% \subsection{设置部分标题格式}
 % \begin{macro}{\part}
-% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置部分格式}
 %    \begin{macrocode}
 \ctexset{
   part/name         = {（,）},
@@ -517,7 +580,8 @@ Author:  Fei Qi <fred.qi@ieee.org>
 }
 %    \end{macrocode}
 % \end{macro}
-% 
+%
+% \subsection{设置节标题格式}
 % \begin{macro}{\mynsfc@secformat}
 %    \begin{macrocode}
 \newcommand{\mynsfc@secformat}{%
@@ -526,7 +590,6 @@ Author:  Fei Qi <fred.qi@ieee.org>
 % \end{macro}
 % 
 % \begin{macro}{\section}
-% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置节标题格式}
 %    \begin{macrocode}
 \ctexset{
   section/format       = \mynsfc@secformat,
@@ -582,6 +645,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{辅助命令实现}
 % \begin{macro}{\cemph}
 %    \begin{macrocode}
 \newcommand{\cemph}[1]{\textbf{\color[HTML]{\mynsfc@toccolor}#1}}
