@@ -105,10 +105,13 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %<*class>
 %</class>
 %<*driver>
-\documentclass[fontset=fandol]{mynsfc}
+\documentclass[a4paper,fontset=fandol,zihao=-4]{ctexart}
 \usepackage{doc}
 \usepackage{metalogo}
+\usepackage[vmargin=1in,lmargin=1.5in,rmargin=0.75in]{geometry}
 \providecommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\usepackage{biblatex}
+\addbibresource{examples/my-proposal.bib}
 \renewcommand{\generalname}{要点}
 \makeatletter
 \def\glossary@prologue{\section{修改记录}}%
@@ -125,11 +128,10 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
-\addbibresource{examples/my-proposal.bib}
 \begin{document}
   \title{国家自然科学基金项目申请书正文模板\\%
     \textmd{\heiti\small （适配2026版面上项目正文模板）}}
-  \author{Fei Qi $\langle$\email{fred.qi@ieee.org}$\rangle$}
+  \author{Fei Qi $\langle$\email{fred.qi@gmail.com}$\rangle$}
   \date{2026年1月26日}
   \maketitle
   \DocInput{mynsfc.dtx}
@@ -194,7 +196,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 \nsfcsection\label{sec:projects}
 
 
-%% 完成国家自然科学基金项目情况（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。}
+%% 完成国家自然科学基金项目情况（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。
 \nsfcsection\label{sec:acomplished-project}
 
 %% （四）其他需要说明的情况：
@@ -275,23 +277,63 @@ Author:  Fei Qi <fred.qi@ieee.org>
 %   （注：本模板需使用 \XeLaTeX{}/\LuaLaTeX{} + \texttt{biber} 编译。）
 % \end{abstract}
 % 
-% \section{介绍}
+% \section{快速上手}
+% 本宏包旨在为国家自然科学基金申请书提供符合官方格式要求的 \LaTeX{} 模板。
+% 最简使用示例见文件\texttt{examples/my-proposal.tex}。
 %
-% \newrefsegment
-%  
-% 申请人针对\textbf{某问题}进行了研究~\cite{xia_saliency_2015}。
-%  
-% 在使用\texttt{biblatex} 3.4以上版本的情况下，建议使用
-%  \texttt{biblatex}提供数据标注功能。如第二个作者是自己，用粗体标记自己的姓
-%  名；且为文章的通记作者，加上角标``*''进行标注。则仅需要在bibtex文
-%  件的相应条目中增加以下标记：
+% 编译说明：请使用 \XeLaTeX{} 引擎配合 \texttt{biber} 进行编译，以确保中文字体与参考文献正确处理。
+%
+% \subsection{标准提纲生成}
+% 为严格遵循基金委当年的申请书提纲要求，防止手动输入导致的文字错漏，本模板提供了“魔术命令”以自动生成标准标题：
+% \begin{itemize}
+%   \item \texttt{\textbackslash nsfcpart}：根据文档当前所在的“部分”编号（如第一部分、第二部分），自动调取并生成对应的中文数字标题及括号内的说明文字。
+%   \item \texttt{\textbackslash nsfcsection}：根据当前“部分”及“小节”编号，自动生成对应的带序号标题及说明文字（如“1. 立项依据...”）。
+% \end{itemize}
+% 推荐申请人始终使用这两个命令构建文档骨架。
+% 
+% \subsection{自定义章节}
+% 如需在标准提纲之外增加章节，或调整特定标题格式，可使用标准命令：
+% \begin{itemize}
+%   \item \texttt{\textbackslash part\{标题\}\{副标题\}}：接受两个参数。若无需副标题（括号内容），第二个参数请留空。
+%   \item \texttt{\textbackslash section\{标题\}}：生成标准小节标题。
+% \end{itemize}
+%
+% 若需要在标题中混合字体（例如：\textbf{粗体标题} \textmd{宋体说明}），可使用 \texttt{\textbackslash textmd} 命令包裹说明文字：
 % \begin{verbatim}
-%   author = "Xia, C and Qi, F and Shi, G and Wang, P",
-%   author+an = {2=self;2:family=corr},
+% \section{拟采取的研究方案及可行性分析 \textmd{（包括研究方法、技术路线...）}}
 % \end{verbatim}
-%   
-% \printbibliography[segment=\therefsegment,heading=cvtype,title={相关工作}]
-% \section{实现}
+%
+% \subsection{成果录入与标注}
+% 本模板基于 \texttt{biblatex} (v3.4+) 实现参考文献管理与作者标注。
+% 
+% \subsubsection{作者高亮与通讯作者标记}
+% 通过在 \texttt{.bib} 文件条目中添加 \texttt{author+an} 字段，可实现灵活的作者标注：
+% \begin{itemize}
+%   \item \texttt{self}：将作者姓名加粗（用于标注申请人）。
+%   \item \texttt{corr}：标记为通讯作者（在右上角添加星号）。
+% \end{itemize}
+% 
+% 语法为 \texttt{作者序号=标注类型}。例如，若申请人为第2作者，且同时为通讯作者：
+% \begin{verbatim}
+% @article{mypaper,
+%   author = {San, Zhang and Si, Li and Wu, Wang},
+%   author+an = {2=self;2:family=corr},
+%   title = {...},
+%   ...
+% }
+% \end{verbatim}
+%
+% \section{宏包选项}
+% \begin{itemize}
+%   \item \texttt{fontset}：字体配置选项。
+%     \begin{itemize}
+%       \item \texttt{none}（默认）：不加载特定字体集，适合 Windows 用户使用系统自带的 SimSun/SimHei。
+%       \item \texttt{fandol}：加载开源 Fandol 字体集，适合 Linux 环境或 CI 自动构建。
+%     \end{itemize}
+%   \item \texttt{toccolor}：定义标题颜色（默认接近 Word 模板的蓝色）。
+% \end{itemize}
+%
+% \section{宏包实现}
 %
 %<*class>
 %    \begin{macrocode}
@@ -384,12 +426,27 @@ Author:  Fei Qi <fred.qi@ieee.org>
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\mkbibnamegiven, \mkbibnamefamily}
+% 
+% 定义页眉页脚样式
+%    \begin{macrocode}
+\def\ps@mynsfc@empty{%
+  \let\@oddhead\@empty%
+  \let\@evenhead\@empty%
+  \let\@oddfoot\@empty%
+  \let\@evenfoot\@empty}
+%    \end{macrocode}
+%
+% Author highlighting (requires biblatex 3.4+, May 2016)
+% \begin{macro}{\mkbibnamegiven}
 % \changes{1.22}{2019/04/07}{使用\texttt{biblatex}进行作者标注}
 %    \begin{macrocode}
-%% Author highlighting (requires biblatex 3.4+, May 2016)
 \renewcommand*{\mkbibnamegiven}[1]{%
   \ifitemannotation{self}{\textbf{#1}}{#1}}
+%    \end{macrocode}
+%    \end{macro}
+%    
+% \begin{macro}{\mkbibnamefamily}
+%    \begin{macrocode}
 \renewcommand*{\mkbibnamefamily}[1]{%
   \ifitemannotation{self}{\textbf{#1}}{#1}%
   \ifpartannotation{family}{corr}{\textsuperscript{*}}{}}
@@ -403,14 +460,6 @@ Author:  Fei Qi <fred.qi@ieee.org>
   \color[HTML]{\mynsfc@toccolor}}
 %    \end{macrocode}
 % \end{macro}
-%    \begin{macrocode}
-% Define page styles      
-\def\ps@mynsfc@empty{%
-  \let\@oddhead\@empty%
-  \let\@evenhead\@empty%
-  \let\@oddfoot\@empty%
-  \let\@evenfoot\@empty}
-%    \end{macrocode}
 %
 % \begin{macro}{\maketitle}
 % \changes{1.01}{2016/07/11}{改进 \texttt{maketitle} 命令}
@@ -426,8 +475,7 @@ Author:  Fei Qi <fred.qi@ieee.org>
 % \end{macro}
 %
 % \begin{macro}{\part}
-% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置格式}
-% \changes{2.00}{2026/01/24}{接受两个参数以设定标题与副标题}
+% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置部分格式}
 %    \begin{macrocode}
 \ctexset{
   part/name         = {（,）},
@@ -438,6 +486,12 @@ Author:  Fei Qi <fred.qi@ieee.org>
   part/afterskip    = 0.5ex,
   part/indent       = 2\ccwd,
 }
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\part}
+% \changes{2.00}{2026/01/24}{接受两个参数以设定标题与副标题}
+%    \begin{macrocode}
 \let\oldpart\part
 \renewcommand{\part}[2]{%
   \oldpart{#1：}%
@@ -449,42 +503,6 @@ Author:  Fei Qi <fred.qi@ieee.org>
       \endgroup
       {\tocformat\zihao{-3}\noindent\hspace{2\ccwd}（#2）}\par%
     \fi}
-%    \end{macrocode}
-% \end{macro}
-% 
-% \begin{macro}{\subsubsection, \subsection, \section}
-% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置格式}
-%    \begin{macrocode}
-\newcommand{\mynsfc@secformat}{%
-  \tocformat\ifnum\value{part}<4\relax\bfseries\fi\zihao{4}}
-\ctexset{
-  section/format       = \mynsfc@secformat,
-  section/number       = \arabic{section},
-  section/aftername    = {.\hspace{1ex}},
-  section/beforeskip   = 1ex,
-  section/afterskip    = 0.5ex,
-  section/indent       = 2\ccwd,
-  section/hang         = false,
-}
-\@addtoreset{section}{part}
-\ctexset{
-  subsection/format       = \tocformat\bfseries\zihao{-4},
-  subsection/number       = \thesubsection,
-  subsection/aftername    = {.\hspace{0.25em}},
-  subsection/beforeskip   = 2ex,
-  subsection/afterskip    = 1ex,
-  subsection/indent       = 0pt,
-}
-\ctexset{
-  subsubsection/name         = {(,)},
-  subsubsection/aftername    = {\hskip1ex},
-  subsubsection/number       = \arabic{subsubsection},
-  subsubsection/format       = \kaishu\bfseries\zihao{-4},
-  subsubsection/beforeskip   = 2ex,
-  subsubsection/afterskip    = 1ex,
-  subsubsection/indent       = 0pt,
-}
-\captionsetup{font=small}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -499,6 +517,29 @@ Author:  Fei Qi <fred.qi@ieee.org>
 }
 %    \end{macrocode}
 % \end{macro}
+% 
+% \begin{macro}{\mynsfc@secformat}
+%    \begin{macrocode}
+\newcommand{\mynsfc@secformat}{%
+  \tocformat\ifnum\value{part}<4\relax\bfseries\fi\zihao{4}}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\section}
+% \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置节标题格式}
+%    \begin{macrocode}
+\ctexset{
+  section/format       = \mynsfc@secformat,
+  section/number       = \arabic{section},
+  section/aftername    = {.\hspace{1ex}},
+  section/beforeskip   = 1ex,
+  section/afterskip    = 0.5ex,
+  section/indent       = 2\ccwd,
+  section/hang         = false,
+}
+\@addtoreset{section}{part}
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\nsfcsection}
 % \changes{2.00}{2026/01/25}{新增魔术命令}
@@ -507,8 +548,37 @@ Author:  Fei Qi <fred.qi@ieee.org>
   \edef\mynsfc@partroman{\@Roman\c@part}%
   \edef\mynsfc@nextsec{\number\numexpr\value{section}+1\relax}%
   \edef\mynsfc@secroman{\@Roman\mynsfc@nextsec}%
-  \section{\csname mynsfc@section@\mynsfc@partroman @\mynsfc@secroman @title\endcsname}%
+  \section{\csname mynsfc@section@\mynsfc@partroman %
+                  @\mynsfc@secroman @title\endcsname}%
 }
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\subsection}
+%    \begin{macrocode}
+\ctexset{
+  subsection/format       = \tocformat\bfseries\zihao{-4},
+  subsection/number       = \thesubsection,
+  subsection/aftername    = {.\hspace{0.25em}},
+  subsection/beforeskip   = 2ex,
+  subsection/afterskip    = 1ex,
+  subsection/indent       = 0pt,
+}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\subsubsection}
+%    \begin{macrocode}
+\ctexset{
+  subsubsection/name         = {(,)},
+  subsubsection/aftername    = {\hskip1ex},
+  subsubsection/number       = \arabic{subsubsection},
+  subsubsection/format       = \kaishu\bfseries\zihao{-4},
+  subsubsection/beforeskip   = 2ex,
+  subsubsection/afterskip    = 1ex,
+  subsubsection/indent       = 0pt,
+}
+\captionsetup{font=small}
 %    \end{macrocode}
 % \end{macro}
 %
