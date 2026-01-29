@@ -30,13 +30,6 @@
 *.synctex.gz(busy)
 *.pdfsync
 
-## Package files:
-mynsfc.pdf
-mynsfc*.zip
-examples/my-proposal.tex
-examples/my-proposal.bib
-examples/my-proposal.pdf
-
 ## Package generated files:
 *.cls
 *.def
@@ -120,6 +113,17 @@ sympy-plots-for-*.tex/
 
 # xindy
 *.xdy
+*.hd
 
+## Package files:
+*.zip
+mynsfc.pdf
+my-proposal.pdf
+
+## Editor directories and files:
+.vscode/
 auto/
 build/
+
+*.bak
+*.patch

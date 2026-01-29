@@ -13,12 +13,13 @@ LOCAL = $(shell kpsewhich --var-value TEXMFLOCAL)
 UTREE = $(shell kpsewhich --var-value TEXMFHOME)
 CLEXT = aux bbl bcf blg fls glo gls hd idx ilg ind ins log out run.xml
 export NAME EGFN LATEX LATEXFLAGS BIB CLEXT
-GENERATED = $(NAME).cls $(NAME).def $(NAME).ins examples/$(EGFN).tex examples/$(EGFN).bib
+GENERATED = $(NAME).cls $(NAME).def $(NAME).ins
+EXAMPLES = $(EGDIR)/$(EGFN).tex $(EGDIR)/$(EGFN).bib
 
 all:	$(NAME).pdf
 	$(MAKE) -C examples all
 
-$(GENERATED): $(NAME).dtx
+$(GENERATED) $(EXAMPLES): $(NAME).dtx
 	tex -interaction=batchmode $(NAME).dtx
 
 $(NAME).pdf: $(NAME).dtx $(NAME).cls
@@ -35,7 +36,7 @@ clean:  $(CLEXT)
 	$(MAKE) -C examples clean
 distclean: clean
 	$(MAKE) -C examples distclean
-	$(RM) $(GENERATED) $(NAME).pdf
+	$(RM) $(GENERATED) $(EXAMPLES) $(NAME).pdf
 define install_tree
 	$(2) mkdir -p $(1)/tex/latex/$(NAME)
 	$(2) cp $(NAME).cls $(NAME).def $(1)/tex/latex/$(NAME)/
@@ -52,9 +53,9 @@ install: all
 	$(call install_tree,$(LOCAL),sudo)
 
 zip: all
-	$(call install_tree,$(TEMP),)
-	cd $(TEMP); zip -Drq $(TEMP)/$(NAME).tds.zip tex source doc
+	$(RM) $(PWD)/$(NAME)-$(VERS).zip
 	mkdir -p $(TDIR)
-	cp $(addprefix $(NAME)., dtx ins cls def pdf) README.md $(TDIR)/
-	cd $(TEMP); zip -Drq $(PWD)/$(NAME)-$(VERS).zip $(NAME) $(NAME).tds.zip
+	cp $(addprefix $(NAME)., dtx ins pdf) README.md $(TDIR)/
+	cp $(EGDIR)/$(EGFN).pdf $(TDIR)/
+	cd $(TEMP); zip -Drq $(PWD)/$(NAME)-$(VERS).zip $(NAME)
 	$(RM) -r $(TEMP)

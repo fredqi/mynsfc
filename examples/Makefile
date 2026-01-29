@@ -26,5 +26,5 @@ $(CLEXT):
 clean: $(CLEXT)
 
 distclean:	clean
-	$(RM) $(EGFN).pdf $(EGFN).bib $(EGFN).tex
+	$(RM) $(EGFN).pdf
 	$(RM) $(LINKS)
