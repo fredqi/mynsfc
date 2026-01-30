@@ -6,7 +6,7 @@ LATEXFLAGS ?= -shell-escape -recorder -interaction=batchmode
 CLEXT   ?= aux bbl bcf blg fls log out run.xml toc
 LINKS   = $(NAME).cls $(NAME).def
 
-all:	$(EGFN).pdf clean
+all:	$(EGFN).pdf
 
 $(LINKS): %: ../%
 	ln -sf $< $@

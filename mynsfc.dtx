@@ -153,9 +153,10 @@ Author: Fei Qi <fred.qi@gmail.com>
 % \changes{2.00}{2026/01/28}{\textbf{适配2026版面上项目正文模板}}
 % \changes{2.00}{2026/01/24}{独立定义文件以便维护}
 % \changes{2.00}{2026/01/26}{更新示例文件以展示新功能}
+% \changes{2.00}{2026/01/28}{更新说明文档}
+% \changes{2.01}{2026/01/30}{若干细节改进}
 %
 % \StopEventually{\PrintChanges}
-% \changes{2.00}{2026/01/28}{更新说明文档}
 %
 % \begin{abstract}
 %   本宏包旨在为国家自然科学基金申请书提供一套非官方的 \LaTeX{} 正文写
@@ -180,7 +181,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 % 考\texttt{ctex}说明文档。\texttt{biber}/\texttt{biblatex}的使用参考相
 % 关文档。
 %
-% \subsection{2026版面项目提纲生成}
+% \subsection{2026版面上项目提纲生成}
 % 为严格遵循基金委当年的申请书提纲要求，防止手动输入导致的文字错漏，本
 % 模板提供了“魔术命令”以自动生成标准标题：
 % \begin{compactitem}
@@ -213,10 +214,10 @@ Author: Fei Qi <fred.qi@gmail.com>
 % 
 % 本模板基于 \texttt{biblatex} (v3.4+) 实现参考文献管理与作者标注。通过
 % 在 \texttt{.bib} 文件条目中添加 \texttt{author+an} 字段，可实现灵活的
-% 作者标注。字段格式为\texttt{<author-index>} \texttt{=<label>}
-% 或\texttt{<author-index>:<part>=<label>},
+% 作者标注。字段格式为\texttt{<author-index>=<label>}，
 % 其中\texttt{author-index}为拟标注作者在姓名列表中的序号。
-% 多个标注用``\texttt{;}''分隔。常用标记如下：
+% 同一作者的多个标注用``\texttt{,}''分隔；不同作者的标注用``\texttt{;}''分隔。
+% 常用标记如下：
 % \begin{compactitem}
 % \item \texttt{self}：表示对应论文作者为自然基金项目申请人（姓名加粗）。
 % \item \texttt{corr}：表示相应论文作者为通讯作者（右上角标注星号）。
@@ -226,14 +227,13 @@ Author: Fei Qi <fred.qi@gmail.com>
 % \begin{verbatim}
 % @article{mypaper,
 %   author = {San Zhang and Si Li and Wu Wang},
-%   author+an = {2=self;2:family=corr;3:family=corr},
+%   author+an = {2=self,corr;3=corr},
 %   title = {...},
 %   ...
 % }
 % \end{verbatim}
-% 其中 \texttt{2=self} 将第2作者（Si Li）姓名加
-% 粗； \texttt{2:family=corr}与 \texttt{3:family=corr} 分别在第2作者与
-% 第3作者（Wu Wang）的姓氏右上角标记星号。
+% 其中 \texttt{2=self,corr} 将第2作者（Si Li）姓名加粗并标注星号；
+% \texttt{3=corr} 在第3作者（Wu Wang）的姓氏右上角标记星号。
 %
 % \section{宏包选项}
 % \begin{compactitem}
@@ -266,6 +266,12 @@ Author: Fei Qi <fred.qi@gmail.com>
 % \changes{1.01}{2016/09/05}{增加标题颜色设置选项}
 %    \begin{macrocode}
 \DeclareStringOption[0070c0]{toccolor}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{tocfont}
+% \changes{2.01}{2026/01/30}{增加标题字体设置选项}
+%    \begin{macrocode}
+\DeclareStringOption[zhkai]{tocfont}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{fontset}
@@ -366,17 +372,19 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \end{macro}
 %    
 % \begin{macro}{\mkbibnamefamily}
+% \changes{2.01}{2026/01/30}{简化通讯作者标注}
 %    \begin{macrocode}
 \renewcommand*{\mkbibnamefamily}[1]{%
-  \ifitemannotation{self}{\textbf{#1}}{#1}%
-  \ifpartannotation{family}{corr}{\textsuperscript{*}}{}}
+    \ifitemannotation{self}{\textbf{#1}}{#1}%
+    \ifitemannotation{corr}{\textsuperscript{*}}{}}
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\tocformat}
+% \begin{macro}{\mynsfc@tocfmt}
+% \changes{2.01}{2026/01/30}{整合优化标题格式}
 %    \begin{macrocode}
-\newcommand{\tocformat}{%
-  \CJKfamily{zhkai}%
+\newcommand{\mynsfc@tocfmt}{%
+  \CJKfamily{\mynsfc@tocfont}%
   \color[HTML]{\mynsfc@toccolor}}
 %    \end{macrocode}
 % \end{macro}
@@ -404,7 +412,7 @@ Author: Fei Qi <fred.qi@gmail.com>
   part/name         = {（,）},
   part/aftername    = {},
   part/number       = \chinese{part},
-  part/format       = \tocformat\bfseries\zihao{-3},
+  part/format       = \mynsfc@tocfmt\bfseries\zihao{-3},
   part/beforeskip   = 1ex,
   part/afterskip    = 0.5ex,
   part/indent       = 2\ccwd,
@@ -424,7 +432,7 @@ Author: Fei Qi <fred.qi@gmail.com>
       \endgroup
     \else
       \endgroup
-      {\tocformat\zihao{-3}\noindent\hspace{2\ccwd}（#2）}\par%
+      {\mynsfc@tocfmt\zihao{-3}\noindent\hspace{2\ccwd}（#2）}\par%
     \fi}
 %    \end{macrocode}
 % \end{macro}
@@ -442,17 +450,19 @@ Author: Fei Qi <fred.qi@gmail.com>
 % \end{macro}
 %
 % \subsection{设置节标题格式}
-% \begin{macro}{\mynsfc@secformat}
+% \begin{macro}{\mynsfc@secfmt}
 %    \begin{macrocode}
-\newcommand{\mynsfc@secformat}{%
-  \tocformat\ifnum\value{part}<4\relax\bfseries\fi\zihao{4}}
+\newcommand{\mynsfc@secfmt}{%
+    \mynsfc@tocfmt\zihao{4}%
+    \ifnum\value{part}<3\relax\color{black}\fi
+    \ifnum\value{part}<4\relax\bfseries\fi}
 %    \end{macrocode}
 % \end{macro}
 % 
 % \begin{macro}{\section}
 %    \begin{macrocode}
 \ctexset{
-  section/format       = \mynsfc@secformat,
+  section/format       = \mynsfc@secfmt,
   section/number       = \arabic{section},
   section/aftername    = {.\hspace{1ex}},
   section/beforeskip   = 1ex,
@@ -477,12 +487,20 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \end{macrocode}
 % \end{macro}
 % 
+% \subsection{设置小节标题格式}
+% \begin{macro}{\mynsfc@subsecfmt}
+%    \begin{macrocode}
+\newcommand{\mynsfc@subsecfmt}{%
+    \CJKfamily{\mynsfc@tocfont}\bfseries\zihao{-4}}%
+%    \end{macrocode}
+% \end{macro}
+% 
 % \begin{macro}{\subsection}
 %    \begin{macrocode}
 \ctexset{
-  subsection/format       = \tocformat\bfseries\zihao{-4},
-  subsection/number       = \thesubsection,
   subsection/aftername    = {.\hspace{0.25em}},
+  subsection/format       = \mynsfc@subsecfmt,
+  subsection/number       = \thesubsection,
   subsection/beforeskip   = 2ex,
   subsection/afterskip    = 1ex,
   subsection/indent       = 0pt,
@@ -495,8 +513,8 @@ Author: Fei Qi <fred.qi@gmail.com>
 \ctexset{
   subsubsection/name         = {(,)},
   subsubsection/aftername    = {\hskip1ex},
+  subsubsection/format       = \mynsfc@subsecfmt,
   subsubsection/number       = \arabic{subsubsection},
-  subsubsection/format       = \kaishu\bfseries\zihao{-4},
   subsubsection/beforeskip   = 2ex,
   subsubsection/afterskip    = 1ex,
   subsubsection/indent       = 0pt,
@@ -651,7 +669,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 @article{mypaper_2025,
     title = {Paper Title},
     author = {San Zhang and Si Li and Wu Wang},
-    author+an = {2=self;2:family=corr;3:family=corr},
+    author+an = {2=self,corr;3=corr},
     volume = {1},
     issue = {1},
     pages = "10--20",
