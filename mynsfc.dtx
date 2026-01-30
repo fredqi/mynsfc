@@ -70,7 +70,10 @@ Author: Fei Qi <fred.qi@gmail.com>
 \makeatletter
 %% Customizable strings for mynsfc class
 \providecommand{\mynsfc@title}{报告正文（2026版）}
-\providecommand{\mynsfc@subtitle}{参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。\textbf{\color{red}申请书正文原则上不超过30页，鼓励简洁表达。}\cemph{请勿删除或改动下述提纲标题及括号中的文字。}}
+\providecommand{\mynsfc@subtitle}{%
+\textmd{参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。}%
+{\color{red}申请书正文原则上不超过30页，鼓励简洁表达。}%
+{\color[HTML]{\mynsfc@toccolor}请勿删除或改动下述提纲标题及括号中的文字。}}
 \providecommand{\mynsfcrefname}{参考文献}
 \providecommand{\mynsfccvname}{相关工作}
 \providecommand{\mynsfcpatentcn}{中国发明专利}
@@ -84,10 +87,18 @@ Author: Fei Qi <fred.qi@gmail.com>
 \providecommand{\mynsfc@part@III@title}{研究基础}
 \providecommand{\mynsfc@part@III@subtitle}{}
 %% Section III-I ...
-\providecommand{\mynsfc@section@III@I@title}{研究基础与可行性分析\textmd{（与本项目相关的研究工作积累和已取得的研究工作成绩，研究风险的应对措施等）；}}
-\providecommand{\mynsfc@section@III@II@title}{工作条件\textmd{（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实情况）；}}
-\providecommand{\mynsfc@section@III@III@title}{正在承担的与本项目相关的科研项目情况\textmd{（申请人和主要参与者正在承担的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、起止年月、与本项目的关系及负责的内容等）；}}
-\providecommand{\mynsfc@section@III@IV@title}{完成国家自然科学基金项目情况\textmd{（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。}}
+\providecommand{\mynsfc@section@III@I@title}{%
+研究基础与可行性分析%
+\textmd{（与本项目相关的研究工作积累和已取得的研究工作成绩，研究风险的应对措施等）；}}
+\providecommand{\mynsfc@section@III@II@title}{%
+工作条件%
+\textmd{（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实情况）；}}
+\providecommand{\mynsfc@section@III@III@title}{%
+正在承担的与本项目相关的科研项目情况%
+\textmd{（申请人和主要参与者正在承担的与本项目相关的科研项目情况，包括国家自然科学基金的项目和国家其他科技计划项目，要注明项目的资助机构、项目类别、批准号、项目名称、获资助金额、起止年月、与本项目的关系及负责的内容等）；}}
+\providecommand{\mynsfc@section@III@IV@title}{%
+完成国家自然科学基金项目情况%
+\textmd{（对申请人负责的前一个已资助期满的科学基金项目（项目名称及批准号）完成情况、后续研究进展及与本申请项目的关系加以详细说明。另附该项目的研究工作总结摘要（限500字）和相关成果详细目录）。}}
 %% Part IV
 \providecommand{\mynsfc@part@IV@title}{其他需要说明的情况}
 \providecommand{\mynsfc@part@IV@subtitle}{}
@@ -380,25 +391,25 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{设置正文标题格式}
+% 
 % \begin{macro}{\mynsfc@tocfmt}
 % \changes{2.01}{2026/01/30}{整合优化标题格式}
 %    \begin{macrocode}
 \newcommand{\mynsfc@tocfmt}{%
-  \CJKfamily{\mynsfc@tocfont}%
-  \color[HTML]{\mynsfc@toccolor}}
+  \CJKfamily{\mynsfc@tocfont}\bfseries}
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsection{设置正文标题格式}
 % \begin{macro}{\maketitle}
 % \changes{1.01}{2016/07/11}{改进 \texttt{maketitle} 命令}
 %    \begin{macrocode}
 \renewcommand{\maketitle}{%
   \begin{center}%
-    \kaishu\zihao{3}\bfseries\mynsfc@title%
+    \mynsfc@tocfmt\zihao{3}\mynsfc@title%
   \end{center}%
   \vspace{1ex}%
-  {\kaishu\zihao{4}\noindent\hspace{2\ccwd}\mynsfc@subtitle}\par%
+  {\mynsfc@tocfmt\zihao{4}\noindent\hspace{2\ccwd}\mynsfc@subtitle}\par%
   \vspace{2ex}}
 %    \end{macrocode}
 % \end{macro}
@@ -406,13 +417,21 @@ Author: Fei Qi <fred.qi@gmail.com>
 % \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置标题格式}
 %
 % \subsection{设置部分标题格式}
+% \changes{2.01}{2026/01/30}{部分标题格式}
+% \begin{macro}{\mynsfc@partfmt}
+%   \begin{macrocode}
+\newcommand{\mynsfc@partfmt}{%
+  \mynsfc@tocfmt\color[HTML]{\mynsfc@toccolor}\zihao{-3}}
+%  \end{macrocode}
+% \ends{macro}
+% 
 % \begin{macro}{\part}
 %    \begin{macrocode}
 \ctexset{
   part/name         = {（,）},
   part/aftername    = {},
   part/number       = \chinese{part},
-  part/format       = \mynsfc@tocfmt\bfseries\zihao{-3},
+  part/format       = \mynsfc@partfmt,
   part/beforeskip   = 1ex,
   part/afterskip    = 0.5ex,
   part/indent       = 2\ccwd,
@@ -431,8 +450,8 @@ Author: Fei Qi <fred.qi@gmail.com>
     \ifx\mynsfc@tempa\@empty
       \endgroup
     \else
-      \endgroup
-      {\mynsfc@tocfmt\zihao{-3}\noindent\hspace{2\ccwd}（#2）}\par%
+      \mynsfc@partfmt\noindent\hspace{2\ccwd}%
+      \textmd{（#2）}\endgroup\par%
     \fi}
 %    \end{macrocode}
 % \end{macro}
@@ -454,7 +473,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \begin{macrocode}
 \newcommand{\mynsfc@secfmt}{%
     \mynsfc@tocfmt\zihao{4}%
-    \ifnum\value{part}<3\relax\color{black}\fi
+    \ifnum\value{part}>2\relax\color[HTML]{\mynsfc@toccolor}\fi
     \ifnum\value{part}<4\relax\bfseries\fi}
 %    \end{macrocode}
 % \end{macro}
