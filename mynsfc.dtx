@@ -74,8 +74,8 @@ Author: Fei Qi <fred.qi@gmail.com>
 \textmd{参照以下提纲撰写，要求内容翔实、清晰，层次分明，标题突出。}%
 {\color{red}申请书正文原则上不超过30页，鼓励简洁表达。}%
 {\color[HTML]{\mynsfc@toccolor}请勿删除或改动下述提纲标题及括号中的文字。}}
-\providecommand{\mynsfcrefname}{参考文献}
-\providecommand{\mynsfccvname}{相关工作}
+\providecommand{\mynsfc@refname}{参考文献}
+\providecommand{\mynsfc@cvname}{相关工作}
 \providecommand{\mynsfcpatentcn}{中国发明专利}
 %% Part I
 \providecommand{\mynsfc@part@I@title}{立项依据}
@@ -136,9 +136,8 @@ Author: Fei Qi <fred.qi@gmail.com>
   \vspace{1em}
 }
 \makeatother
-\EnableCrossrefs
-\CodelineIndex
-\RecordChanges
+\AtBeginDocument{\CodelineIndex\RecordChanges}
+\AtEndDocument{\PrintChanges}
 \begin{document}
   \title{国家自然科学基金项目申请书正文模板\\%
     \textmd{\heiti\small （\texttt{2.0}版：适配2026版面上项目正文模板）}}
@@ -225,10 +224,11 @@ Author: Fei Qi <fred.qi@gmail.com>
 % 
 % 本模板基于 \texttt{biblatex} (v3.4+) 实现参考文献管理与作者标注。通过
 % 在 \texttt{.bib} 文件条目中添加 \texttt{author+an} 字段，可实现灵活的
-% 作者标注。字段格式为\texttt{<author-index>=<label>}，
+% 作者标注。字段格式为\texttt{<author-index>} \texttt{=<annotations>}，
 % 其中\texttt{author-index}为拟标注作者在姓名列表中的序号。
-% 同一作者的多个标注用``\texttt{,}''分隔；不同作者的标注用``\texttt{;}''分隔。
-% 常用标记如下：
+% 每个作者的\texttt{<annotations>}可包括1个或多个标记，
+% 标记之间用``\texttt{,}''分隔；不同作者的标注则用``\texttt{;}''分隔。
+% 模板定义的标记如下：
 % \begin{compactitem}
 % \item \texttt{self}：表示对应论文作者为自然基金项目申请人（姓名加粗）。
 % \item \texttt{corr}：表示相应论文作者为通讯作者（右上角标注星号）。
@@ -256,41 +256,64 @@ Author: Fei Qi <fred.qi@gmail.com>
 %     或 CI 自动构建。
 %   \end{compactitem}
 % \item \texttt{toccolor}：定义标题颜色（默认接近 Word 模板的蓝色）。
+% \item \texttt{citestyle, bibstyle, doi, maxbibnames}：
+%   透传给 \texttt{biblatex} 宏包的选项。其中 \texttt{maxbibnames} 默认为
+%   99 以显示所有作者；\texttt{citestyle} 和 \texttt{bibstyle} 默认为
+%   \texttt{ieee}；\texttt{doi} 默认为 \texttt{false}。
 % \end{compactitem}
 %
 % \section{宏包实现}
 % \subsection{宏包选项实现}
 % 
-%<*class>
 %    \begin{macrocode}
+%<*class>
 \ExecuteOptions{}
 \ProcessOptions*
 %    \end{macrocode}
 % \begin{macro}{kvoptions}
+% 使用宏包\texttt{kvoptions}处理宏包选项。
 % \changes{1.01}{2016/09/05}{处理宏包选项}
 %    \begin{macrocode}
 \RequirePackage{kvoptions}
 \RequirePackage{etoolbox}
 %    \end{macrocode}
 % \end{macro}
+% 
 % \begin{macro}{toccolor}
 % \changes{1.01}{2016/09/05}{增加标题颜色设置选项}
+% 设置提纲模板标题颜色，默认为接近 Word 模板的蓝色。
 %    \begin{macrocode}
 \DeclareStringOption[0070c0]{toccolor}
 %    \end{macrocode}
 % \end{macro}
+% 
 % \begin{macro}{tocfont}
 % \changes{2.01}{2026/01/30}{增加标题字体设置选项}
+% 设置提纲模板标题字体，默认为楷体。
 %    \begin{macrocode}
 \DeclareStringOption[zhkai]{tocfont}
 %    \end{macrocode}
 % \end{macro}
+% 
 % \begin{macro}{fontset}
-% \changes{2.00}{2026/01/27}{增加字体配置选项}
+% \changes{2.00}{2026/01/27}{CTeX字体透传选项}
+% 主要用于在CI环境中选择fandol字体集，一般使用不需要设置。
 %    \begin{macrocode}
 \DeclareStringOption[none]{fontset}
 %    \end{macrocode}
 % \end{macro}
+% 
+% \begin{macro}{biblatex options}
+% \changes{2.01}{2026/01/30}{biblatex透传选项}
+% \texttt{biblatex}宏集透传选项，用于选择合适的引用与参考文献格式。
+%    \begin{macrocode}
+\DeclareStringOption[ieee]{citestyle}
+\DeclareStringOption[ieee]{bibstyle}
+\DeclareStringOption[false]{doi}
+\DeclareStringOption[99]{maxbibnames}
+%    \end{macrocode}
+% \end{macro}
+% 
 %   \begin{macrocode}
 \ProcessKeyvalOptions*
 %% Load customizable strings
@@ -318,12 +341,13 @@ Author: Fei Qi <fred.qi@gmail.com>
 }{%
   \LoadClass[a4paper,UTF8,fontset=fandol,zihao=-4]{ctexart}
 }
-\RequirePackage[hmargin=1.18in,vmargin=0.98in]{geometry}
-\setlength{\parskip}{0pt \@plus2pt \@minus0pt}
 %    \end{macrocode}
 %
+% \subsubsection{加载其他常用宏包}
+% 
 %    \begin{macrocode}
-%% Load required packages
+\RequirePackage[hmargin=1.18in,vmargin=0.98in]{geometry}
+\setlength{\parskip}{0pt \@plus2pt \@minus0pt}
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{graphicx}
 \RequirePackage{caption,subcaption}
@@ -336,20 +360,33 @@ Author: Fei Qi <fred.qi@gmail.com>
   pdfpagelabels}
 \urlstyle{same}
 %    \end{macrocode}
-% \subsubsection{加载\texttt{biblatex}宏包并设置作者标注}
+%
+% \subsubsection{定义页眉页脚样式}
+% \begin{macro}{\ps@mynsfc@empty}
+% 空白页眉页脚样式。
 %    \begin{macrocode}
-%% Load and setup package biblatex
-\RequirePackage[backend=biber,
-                doi=false,
-                url=false,
-                isbn=false,
-                defernumbers=true,                
-                style=ieee]{biblatex}
+\def\ps@mynsfc@empty{%
+  \let\@oddhead\@empty%
+  \let\@evenhead\@empty%
+  \let\@oddfoot\@empty%
+  \let\@evenfoot\@empty}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \subsubsection{加载并设置\texttt{biblatex}宏包}
+%    \begin{macrocode}
+\RequirePackage[%
+  backend=biber,%
+  url=false,%
+  isbn=false,%
+  defernumbers=true,%
+  citestyle=\mynsfc@citestyle,%
+  bibstyle=\mynsfc@bibstyle,%
+  doi=\mynsfc@doi,%
+  maxbibnames=\mynsfc@maxbibnames]{biblatex}
 
 \setlength{\bibitemsep}{2pt}
 \appto{\bibfont}{\normalfont\zihao{5}\linespread{1}\selectfont}
-\defbibheading{reftype}[\mynsfcrefname]{\section*{#1}}
-\defbibheading{cvtype}[\mynsfccvname]{\subsection*{#1}}
 \defbibfilter{conference}{type=inproceedings or type=incollection}
 %    \end{macrocode}
 % \begin{macro}{patentcn}
@@ -364,45 +401,99 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \end{macrocode}
 % \end{macro}
 % 
-% 定义页眉页脚样式
 %    \begin{macrocode}
-\def\ps@mynsfc@empty{%
-  \let\@oddhead\@empty%
-  \let\@evenhead\@empty%
-  \let\@oddfoot\@empty%
-  \let\@evenfoot\@empty}
+\newbool{annotself}
+\newbool{annotcorr}
 %    \end{macrocode}
 %
 % Author highlighting (requires biblatex 3.4+, May 2016)
 % \begin{macro}{\mkbibnamegiven}
+% 定义名字高亮格式。
 % \changes{1.22}{2019/04/07}{使用\texttt{biblatex}进行作者标注}
 %    \begin{macrocode}
 \renewcommand*{\mkbibnamegiven}[1]{%
-  \ifitemannotation{self}{\textbf{#1}}{#1}}
+  \ifbool{annotself}%
+    {\ifitemannotation{self}{\textbf{#1}}{#1}}%
+    {#1}%
+}
 %    \end{macrocode}
 %    \end{macro}
 %    
 % \begin{macro}{\mkbibnamefamily}
 % \changes{2.01}{2026/01/30}{简化通讯作者标注}
+% 定义姓氏高亮格式。
 %    \begin{macrocode}
 \renewcommand*{\mkbibnamefamily}[1]{%
-    \ifitemannotation{self}{\textbf{#1}}{#1}%
-    \ifitemannotation{corr}{\textsuperscript{*}}{}}
+  \ifbool{annotself}%
+    {\ifitemannotation{self}{\textbf{#1}}{#1}}%
+    {#1}%
+  \ifbool{annotcorr}%
+    {\ifitemannotation{corr}{\textsuperscript{*}}{}}%
+    {}%
+}
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsection{设置正文标题格式}
+% \begin{macro}{annotatedauthor}
+%    \begin{macrocode}
+% \DeclareNameFormat{annotatedauthor}{%
+%  \nameparts{#1}%
+%  \usebibmacro{name:given-family}{\namepartfamily}{\namepartgiven}{\namepartprefix}{\namepartsuffix}%
+%  \ifbool{annotcorr}{%
+%    \ifitemannotation{corr}{\textsuperscript{**}}{}%
+%  }{}%
+% }
+% \DeclareNameAlias{author}{annotatedauthor}
+% \DeclareNameAlias{default}{annotatedauthor}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{cvenv}
+% \changes{2.01}{2026/01/31}{新增文献作者标注控制环境}
+% 定义简历环境，使用\texttt{\textbackslash printbibliography}列出参考文献时
+% 指定该环境将启用作者标注功能。
+%    \begin{macrocode}
+\defbibenvironment{cvenv}
+  {\list
+     {}
+     {\setlength{\leftmargin}{\bibhang}%
+      \setlength{\itemindent}{-\leftmargin}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}%
+   \booltrue{annotself}
+   \booltrue{annotcorr}}
+  {\endlist}
+  {\item}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{refheading}
+% 参考文献标题格式，使用\texttt{\textbackslash section}样式。
+%    \begin{macrocode}
+  \defbibheading{refheading}[\mynsfc@refname]{\section*{#1}}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{cvheading}
+% 简历成果标题格式，使用\texttt{\textbackslash subsection}样式。
+%    \begin{macrocode}
+\defbibheading{cvheading}[\mynsfc@cvname]{\subsection*{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{设置各级标题格式}
 % 
 % \begin{macro}{\mynsfc@tocfmt}
 % \changes{2.01}{2026/01/30}{整合优化标题格式}
+% 提纲模板标题的通用字体样式。
 %    \begin{macrocode}
-\newcommand{\mynsfc@tocfmt}{%
-  \CJKfamily{\mynsfc@tocfont}\bfseries}
+\newcommand{\mynsfc@tocfmt}{\CJKfamily{\mynsfc@tocfont}\bfseries}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\maketitle}
 % \changes{1.01}{2016/07/11}{改进 \texttt{maketitle} 命令}
+% 设置申请书正文标题格式。
 %    \begin{macrocode}
 \renewcommand{\maketitle}{%
   \begin{center}%
@@ -416,17 +507,13 @@ Author: Fei Qi <fred.qi@gmail.com>
 %
 % \changes{2.00}{2026/01/24}{使用\texttt{ctexset}设置标题格式}
 %
-% \subsection{设置部分标题格式}
-% \changes{2.01}{2026/01/30}{部分标题格式}
-% \begin{macro}{\mynsfc@partfmt}
+% \begin{macro}{\part}
+% \changes{2.01}{2026/01/30}{设置部分标题格式}
+% 设置部分标题格式。
 %   \begin{macrocode}
 \newcommand{\mynsfc@partfmt}{%
   \mynsfc@tocfmt\color[HTML]{\mynsfc@toccolor}\zihao{-3}}
-%  \end{macrocode}
-% \ends{macro}
-% 
-% \begin{macro}{\part}
-%    \begin{macrocode}
+
 \ctexset{
   part/name         = {（,）},
   part/aftername    = {},
@@ -441,6 +528,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 % 
 % \begin{macro}{\part}
 % \changes{2.00}{2026/01/24}{双参数用于设定标题与副标题}
+% 双参数用于设定标题与副标题。
 %    \begin{macrocode}
 \let\oldpart\part
 \renewcommand{\part}[2]{%
@@ -458,6 +546,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 %
 % \begin{macro}{\nsfcpart}
 % \changes{2.00}{2026/01/25}{新增魔术命令}
+% 模板部分标题的魔术命令。
 %    \begin{macrocode}
 \newcommand{\nsfcpart}{%
   \edef\mynsfc@nextpart{\number\numexpr\value{part}+1\relax}%
@@ -468,18 +557,15 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsection{设置节标题格式}
-% \begin{macro}{\mynsfc@secfmt}
+% \begin{macro}{\section}
+% \changes{2.01}{2026/01/30}{设置节标题格式}
+% 设置节标题格式。
 %    \begin{macrocode}
 \newcommand{\mynsfc@secfmt}{%
     \mynsfc@tocfmt\zihao{4}%
     \ifnum\value{part}>2\relax\color[HTML]{\mynsfc@toccolor}\fi
     \ifnum\value{part}<4\relax\bfseries\fi}
-%    \end{macrocode}
-% \end{macro}
-% 
-% \begin{macro}{\section}
-%    \begin{macrocode}
+
 \ctexset{
   section/format       = \mynsfc@secfmt,
   section/number       = \arabic{section},
@@ -495,6 +581,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 %
 % \begin{macro}{\nsfcsection}
 % \changes{2.00}{2026/01/25}{新增魔术命令}
+% 用于生成节标题的魔术命令。
 %    \begin{macrocode}
 \newcommand{\nsfcsection}{%
   \edef\mynsfc@partroman{\@Roman\c@part}%
@@ -506,16 +593,12 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \end{macrocode}
 % \end{macro}
 % 
-% \subsection{设置小节标题格式}
-% \begin{macro}{\mynsfc@subsecfmt}
+% \begin{macro}{\subsection}
+% 设置小节标题格式。
 %    \begin{macrocode}
 \newcommand{\mynsfc@subsecfmt}{%
     \CJKfamily{\mynsfc@tocfont}\bfseries\zihao{-4}}%
-%    \end{macrocode}
-% \end{macro}
-% 
-% \begin{macro}{\subsection}
-%    \begin{macrocode}
+
 \ctexset{
   subsection/aftername    = {.\hspace{0.25em}},
   subsection/format       = \mynsfc@subsecfmt,
@@ -528,6 +611,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 % \end{macro}
 % 
 % \begin{macro}{\subsubsection}
+% 设置三级节标题格式。
 %    \begin{macrocode}
 \ctexset{
   subsubsection/name         = {(,)},
@@ -542,8 +626,9 @@ Author: Fei Qi <fred.qi@gmail.com>
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsection{辅助命令实现}
+% \subsubsection{辅助命令实现}
 % \begin{macro}{\cemph}
+% 使用提纲模板颜色的强调文本。
 %    \begin{macrocode}
 \newcommand{\cemph}[1]{\textbf{\color[HTML]{\mynsfc@toccolor}#1}}
 %    \end{macrocode}
@@ -551,8 +636,8 @@ Author: Fei Qi <fred.qi@gmail.com>
 %
 %    \begin{macrocode}
 \AtBeginDocument{\ps@mynsfc@empty}
-%    \end{macrocode}
 %</class>
+%    \end{macrocode}
 %    
 % \iffalse
 %<*example>
@@ -611,7 +696,10 @@ Author: Fei Qi <fred.qi@gmail.com>
 略
 
 \section{年度研究计划}
-\section*{参考文献}
+
+论文\cite{mypaper_2025}XXX。
+
+\printbibliography[heading=refheading]{}
 
 %% （三）研究基础:
 \nsfcpart\label{part:foundations}
@@ -623,7 +711,7 @@ Author: Fei Qi <fred.qi@gmail.com>
 
 发表论文\cite{mypaper_2025}在XX领域具有重要影响。
 
-\printbibliography[heading=cvtype]{}
+\printbibliography[env=cvenv, heading=cvheading]{}
 
 %% 工作条件（包括已具备的实验条件，尚缺少的实验条件和拟解决的途径，包括
 %% 利用国家实验室、全国重点实验室和部门重点实验室等研究基地的计划与落实
